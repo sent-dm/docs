@@ -80,7 +80,7 @@
       "group": "Endpoint Examples",
       "pages": [
         "api-reference/subscriber/create-subscriber",
-        "api-reference/message/create-message",
+        "api-reference/message/create-message-template",
         "api-reference/message/send/send-message"
       ]
     }
