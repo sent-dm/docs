@@ -1,9 +1,9 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "Sent Docs",
-  "openapi": "https://mintlify.com/specs/v2/openapi.json",
+  "openapi": "https://sent.dm/openapi.json",
   "logo": {
-    "dark": "/logo/dark.svg",
+    "dark": "/logo/sentblack.svg",
     "light": "/logo/light.svg"
   },
   "favicon": "/favicon.svg",
