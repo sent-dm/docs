@@ -8,12 +8,12 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#21272f",
+    "light": "#b5b5b5",
+    "dark": "#21272f",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#21272f",
+      "to": "#b5b5b5"
     }
   },
   "topbarLinks": [
@@ -73,14 +73,15 @@
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
+
       ]
     },
     {
       "group": "Endpoint Examples",
       "pages": [
-        "api-reference/subscriber/create",
-        "api-reference/message/create",
-        "api-reference/message/send"
+        "api-reference/subscriber/create-subscriber",
+        "api-reference/message/create-message",
+        "api-reference/message/send/send-message"
       ]
     }
   ],
