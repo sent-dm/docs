@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Sent Docs",
+  "name": "Sent Docs & API Reference",
   "openapi": "https://sent.dm/openapi.json",
   "logo": {
     "dark": "/logo/sentblack.svg",
@@ -23,8 +23,8 @@
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://app.sent.dm"
+    "name": "Home",
+    "url": "https://sent.dm"
   },
   "tabs": [
     {
@@ -39,14 +39,9 @@
       "url": "https://sent.dm/docs"
     },
     {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "name": "Contact",
+      "icon": "message",
+      "url": "https://sent.dm/contact-us"
     }
   ],
   "navigation": [
