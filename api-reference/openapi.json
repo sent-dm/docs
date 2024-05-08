@@ -19,7 +19,23 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MessagePayload"
+                "type": "object",
+                "properties": {
+                  "siteId": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "siteId",
+                  "name",
+                  "content"
+                ]
               }
             }
           }
@@ -30,25 +46,200 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MessageResponseSuccess"
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "siteId": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "publishQstash": {
+                      "type": "boolean"
+                    }
+                  }
                 }
               }
             }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
+            "description": "Bad Request - The request is malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "bad_request",
+                    "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
+                  }
+                }
+              }
+            }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "unauthorized",
+                    "message": "Authentication credentials were not provided or are invalid.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
+                  }
+                }
+              }
+            }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Forbidden - The client lacks proper permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "forbidden",
+                    "message": "You do not have the necessary permissions for the resource.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "description": "Not Found - The requested resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "The requested resource could not be found.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "internal_server_error",
+                    "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -62,7 +253,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SubscriberPayload"
+                "type": "object",
+                "properties": {
+                  "phoneNumber": {
+                    "type": "string"
+                  },
+                  "siteId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "phoneNumber",
+                  "siteId"
+                ]
               }
             }
           }
@@ -101,19 +304,169 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
+            "description": "Bad Request - The request is malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "bad_request",
+                    "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
+                  }
+                }
+              }
+            }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "unauthorized",
+                    "message": "Authentication credentials were not provided or are invalid.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
+                  }
+                }
+              }
+            }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Forbidden - The client lacks proper permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "forbidden",
+                    "message": "You do not have the necessary permissions for the resource.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "description": "Not Found - The requested resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "The requested resource could not be found.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "internal_server_error",
+                    "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -132,7 +485,35 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SendMessagePayload"
+                "type": "object",
+                "properties": {
+                  "siteId": {
+                    "type": "string"
+                  },
+                  "recipients": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "messageId": {
+                    "type": "string"
+                  },
+                  "senderPhoneNumber": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "sendAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "siteId",
+                  "recipients",
+                  "messageId"
+                ]
               }
             }
           }
@@ -157,19 +538,169 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
+            "description": "Bad Request - The request is malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "bad_request",
+                    "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
+                  }
+                }
+              }
+            }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "unauthorized",
+                    "message": "Authentication credentials were not provided or are invalid.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
+                  }
+                }
+              }
+            }
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "description": "Forbidden - The client lacks proper permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "forbidden",
+                    "message": "You do not have the necessary permissions for the resource.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "description": "Not Found - The requested resource could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "not_found",
+                    "message": "The requested resource could not be found.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
+            "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "doc_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "error": {
+                    "code": "internal_server_error",
+                    "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
+                    "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -303,7 +834,23 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "doc_url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             },
             "example": {
               "error": {
@@ -320,7 +867,23 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "doc_url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             },
             "example": {
               "error": {
@@ -337,7 +900,23 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "doc_url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             },
             "example": {
               "error": {
@@ -354,7 +933,23 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "doc_url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             },
             "example": {
               "error": {
@@ -371,7 +966,23 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "doc_url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             },
             "example": {
               "error": {
