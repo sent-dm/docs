@@ -1,0 +1,32 @@
+### `id` (string, required)
+The unique identifier for the site, generated automatically by the system using a CUID algorithm.
+
+### `name` (string, optional)
+The human-readable name of the site. This field is optional and can be used for display purposes.
+
+### `description` (string, optional)
+A brief description of what the site or service offers or represents.
+
+### `logo` (string, optional)
+A URL pointing to the logo image. By default, it points to a predefined location but can be overridden by the user.
+- Default: `https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/JRajRyC-PhBHEinQkupt02jqfKacBVHLWJq7Iy.png`
+
+### `image` (string, optional)
+A background or main image associated with the site. Often used as a hero image.
+- Default: `https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/hxfcV5V-eInX3jbVUhjAt1suB7zB88uGd1j20b.png`
+
+### `subdomain` (string, optional)
+A unique subdomain name under which the site can be accessed. This is unique across all sites.
+
+### `customDomain` (string, optional)
+A custom domain set by the user, providing a personalised site URL.
+
+### `message404` (string, optional)
+The custom message displayed on a 404 (Not Found) error page.
+- Default: `"Blimey! You've found a page that doesn't exist."`
+
+### `createdAt` (DateTime, required)
+The timestamp when the site was created. This value is set automatically.
+
+### `updatedAt` (DateTime, required)
+The timestamp of when the site was last updated.

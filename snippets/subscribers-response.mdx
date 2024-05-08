@@ -1,0 +1,47 @@
+### `id` (string, required)
+The unique identifier for the subscriber, automatically generated and managed.
+
+### `phoneNumber` (string, required)
+The phone number of the subscriber, which must be unique across all subscribers.
+
+### `defaultChannel` (object, optional)
+The default communication channel for the subscriber, detailing type and configurations.
+- Values: 'sms', 'whatsapp', 'telegram', 'imessage'
+
+### `SubscriberChannels` (array of objects, required)
+The list of all subscribed channels by the subscriber, providing details on the status and specific configurations of each.
+- Structure Contains:
+  - `channel`: The type of subscription channel (e.g., 'sms', 'whatsapp')
+  - `valid`: Status of the channel (e.g., 'pending', 'active', 'inactive')
+
+### `createdAt` (DateTime, required)
+The timestamp indicating when the subscriber was first created in the system. Formatted as a date-time string.
+
+### `updatedAt` (DateTime, required)
+The timestamp indicating when the subscriber information was last updated. Formatted as a date-time string.
+
+### `countryCode` (string, optional)
+The country code associated with the subscriber's phone number.
+
+### `countryIso` (string, optional)
+The ISO country code representing the subscriber's country of residence.
+
+### `verificationStatus` (string, required)
+The current verification status of the subscriber. This can be 'pending', 'active', or 'inactive'.
+
+### `Events` (array of objects, optional)
+A collection of events related to the subscriber, each detailing the nature and time of the event.
+- Each Event Contains:
+  - `id`: Unique identifier for the event
+  - `name`: Name or title of the event
+  - `timestamp`: The date and time when the event occurred, formatted as a date-time string
+  - `channelType`: Type of channel used during the event (e.g., 'sms', 'telegram')
+  - `properties`: Additional properties and details about the event stored in a JSON format
+
+### `messages` (array of objects, optional)
+The messages sent to or from the subscriber through various channels.
+- Each message contains:
+  - `id`: Unique identifier of the message
+  - `title`: Title or subject of the message
+  - `content`: The actual content of the message
+  - `timestamp`: The date and time when the message was sent or received

@@ -46,24 +46,6 @@ Here is a list of all error codes Sent.dm API returns:
 - **Problem:** The server has not found anything matching the request URI.
 - **Solution:** Check the request and make sure the resource exists.
 
-### `conflict`
-
-- **Status:** 409
-- **Problem:** Another resource already uses the same identifier. For example, workspace slug must be unique.
-- **Solution:** Change the identifier to a unique value.
-
-### `unprocessable_entity`
-
-- **Status:** 422
-- **Problem:** The server was unable to process the request because it contains invalid data.
-- **Solution:** Check the request and make sure input data is valid.
-
-### `rate_limit_exceeded`
-
-- **Status:** 429
-- **Problem:** The request has been rate limited.
-- **Solution:** Wait for a while and try again.
-
 ### `internal_server_error`
 
 - **Status:** 500
