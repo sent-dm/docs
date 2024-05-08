@@ -3,8 +3,8 @@
   "name": "Sent Docs & API Ref",
   "openapi": "api-reference/openapi.json",
   "logo": {
-    "dark": "/logo/sentblack.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/sent1.png",
+    "light": "/logo/sent.png"
   },
   "favicon": "/favicon.svg",
   "colors": {
