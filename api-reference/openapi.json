@@ -276,29 +276,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "subscriber": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "phoneNumber": {
-                          "type": "string"
-                        },
-                        "siteId": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/SubscriberResponse"
                 }
               }
             }
@@ -826,7 +804,147 @@
             }
           }
         }
+      },
+      "Subscriber": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The unique identifier for the subscriber, automatically generated and managed."
+            },
+            "phoneNumber": {
+              "type": "string",
+              "description": "The phone number of the subscriber, which must be unique across all subscribers."
+            },
+            "defaultChannel": {
+              "$ref": "#/components/schemas/SubscriptionChannel"
+            },
+            "SubscriberChannels": {
+              "type": "array",
+              "description": "The list of all subscribed channels by the subscriber, providing details on the status and specific configurations of each.",
+              "items": {
+                "$ref": "#/components/schemas/SubscriberChannels"
+              }
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The timestamp indicating when the subscriber was first created in the system, formatted as a date-time string."
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The timestamp indicating when the subscriber information was last updated, formatted as a date-time string."
+            },
+            "countryCode": {
+              "type": "string",
+              "description": "The country code associated with the subscriber's phone number."
+            },
+            "countryIso": {
+              "type": "string",
+              "description": "The ISO country code representing the subscriber's country of residence."
+            },
+            "verificationStatus": {
+              "type": "string",
+              "enum": ["pending", "active", "inactive"],
+              "description": "The current verification status of the subscriber."
+            },
+            "Events": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Event"
+              }
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MessageAction"
+              }
+            }
+          }
+      },
+      "SubscriberResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "subscriber": {
+            "$ref": "#/components/schemas/Subscriber"
+          }
+        }
+      },
+      "Event": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The unique identifier for the event, automatically generated and managed."
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the event."
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The timestamp when the event occurred, automatically set to the current time."
+            },
+            "channelType": {
+              "type": "string",
+              "description": "The communication channel type used during the event."
+            },
+            "properties": {
+              "type": "object",
+              "description": "Additional JSON formatted properties related to the event."
+            }
+          }
+      },
+      "SubscriptionChannel": {
+          "type": "string",
+          "enum": ["sms", "whatsapp", "telegram", "imessage"],
+          "description": "The types of subscription channels available."
+      },
+      "SubscriberChannels": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "$ref": "#/components/schemas/SubscriptionChannel"
+            },
+            "valid": {
+              "type": "string",
+              "enum": ["pending", "valid", "invalid"],
+              "default": "pending",
+              "description": "Current status of the channel, automatically set to pending."
+            }
+          }
+      },
+      "MessageAction": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the message."
+            },
+            "title": {
+              "type": "string",
+              "description": "Title or subject of the message."
+            },
+            "content": {
+              "type": "string",
+              "description": "The actual content of the message."
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The date and time when the message was sent or received."
+            }
+          }
       }
+      
     },
     "responses": {
       "BadRequest": {

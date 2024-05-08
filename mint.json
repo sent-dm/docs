@@ -47,7 +47,7 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
+      "pages": ["introduction", "quickstart", "development", "datamodels"]
     },
     {
       "group": "Essentials",
@@ -68,13 +68,13 @@
         {
           "group": "messages",
           "pages": [
-            "api-reference/create-message-template",
-            "api-reference/send/send-message"
+            "api-reference/message/create-message-template",
+            "api-reference/message/send/send-message"
           ]
         },
         { "group": "subscriber", 
           "pages": [
-            "api-reference/create-subscriber"
+            "api-reference/subscriber/create-subscriber"
             ] 
           }
       ]
