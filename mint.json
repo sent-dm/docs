@@ -68,14 +68,15 @@
         { "group": "Subscribers", 
           "pages": [
             "api-reference/subscriber/create-subscriber",
-            "api-reference/subscriber/retrieve-a-subscriber",
+            "api-reference/subscriber/retrieve-a-subscribers-details",
             "api-reference/subscriber/delete-a-subscriber",
-            "api-reference/subscriber/update-subscriber"
+            "api-reference/subscriber/update-subscriber-details"
             ] 
           },
         {
           "group": "Message Templates",
           "pages": [
+            "api-reference/message/create-message-template",
             "api-reference/message/retrieve-a-list-of-messages",
             "api-reference/message/retrieve-details-of-a-specific-message"
           ]
