@@ -1,507 +1,393 @@
 {
-
   "openapi": "3.0.0",
   "info": {
-      "title": "Sent.dm API",
-      "version": "1.0"
+    "title": "Sent.dm API",
+    "version": "1.0"
   },
   "servers": [
-      {
-          "url": "https://sent.dm/api"
-      }
+    {
+      "url": "https://sent.dm/api"
+    }
   ],
   "paths": {
-      "/messages": {
-          "post": {
-              "summary": "Post a new message and publish to a message queue",
-              "operationId": "postMessage",
-              "requestBody": {
-                  "required": true,
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/MessagePayload"
-                          }
-                      }
-                  }
-              },
-              "responses": {
-                  "200": {
-                      "description": "Successfully created the message and published to queue",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/MessageResponseSuccess"
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "$ref": "#/components/responses/BadRequest"
-                  },
-                  "401": {
-                      "$ref": "#/components/responses/Unauthorized"
-                  },
-                  "403": {
-                      "$ref": "#/components/responses/Forbidden"
-                  },
-                  "404": {
-                      "$ref": "#/components/responses/NotFound"
-                  },
-                  "500": {
-                      "$ref": "#/components/responses/InternalServerError"
-                  }
+    "/messages": {
+      "post": {
+        "summary": "Post a new message and publish to a message queue",
+        "operationId": "postMessage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessagePayload"
               }
+            }
           }
-      },
-      "/subscribers": {
-          "post": {
-              "summary": "Create a subscriber and handle their subscription status",
-              "operationId": "postSubscriber",
-              "requestBody": {
-                  "required": true,
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/SubscriberPayload"
-                          }
-                      }
-                  }
-              },
-              "responses": {
-                  "200": {
-                      "description": "Subscriber is created or already exists",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "object",
-                                  "properties": {
-                                      "success": {
-                                          "type": "boolean"
-                                      },
-                                      "message": {
-                                          "type": "string"
-                                      },
-                                      "subscriber": {
-                                          "type": "object",
-                                          "properties": {
-                                              "id": {
-                                                  "type": "string"
-                                              },
-                                              "phoneNumber": {
-                                                  "type": "string"
-                                              },
-                                              "siteId": {
-                                                  "type": "string"
-                                              }
-                                          }
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                    "$ref": "#/components/responses/BadRequest"
-                },
-                "401": {
-                    "$ref": "#/components/responses/Unauthorized"
-                },
-                "403": {
-                    "$ref": "#/components/responses/Forbidden"
-                },
-                "404": {
-                    "$ref": "#/components/responses/NotFound"
-                },
-                "500": {
-                    "$ref": "#/components/responses/InternalServerError"
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created the message and published to queue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseSuccess"
                 }
               }
-          }
-      }
-  },
-  "/messages/send": {
-      "post": {
-          "summary": "Queue a message for sending at a specified time",
-          "operationId": "queueMessage",
-          "security": [
-              {
-                  "APIKeyAuth": []
-              }
-          ],
-          "requestBody": {
-              "required": true,
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "$ref": "#/components/schemas/SendMessagePayload"
-                      }
-                  }
-              }
+            }
           },
-          "responses": {
-              "202": {
-                  "description": "Message payload queued for processing",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "type": "object",
-                              "properties": {
-                                  "success": {
-                                      "type": "boolean"
-                                  },
-                                  "message": {
-                                      "type": "string"
-                                  }
-                              }
-                          }
-                      }
-                  }
-              },
-              "400": {
-                  "$ref": "#/components/responses/BadRequest"
-              },
-              "401": {
-                  "$ref": "#/components/responses/Unauthorized"
-              },
-              "403": {
-                  "$ref": "#/components/responses/Forbidden"
-              },
-              "404": {
-                  "$ref": "#/components/responses/NotFound"
-              },
-              "500": {
-                  "$ref": "#/components/responses/InternalServerError"
-              }
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
           }
+        }
       }
+    },
+    "/subscribers": {
+      "post": {
+        "summary": "Create a subscriber and handle their subscription status",
+        "operationId": "postSubscriber",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriberPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscriber is created or already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "subscriber": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "phoneNumber": {
+                          "type": "string"
+                        },
+                        "siteId": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/messages/send": {
+      "post": {
+        "summary": "Queue a message for sending at a specified time",
+        "operationId": "queueMessage",
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessagePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Message payload queued for processing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
   },
   "components": {
-      "securitySchemes": {
-          "APIKeyAuth": {
-              "type": "http",
-              "scheme": "bearer",
-              "bearerFormat": "API Key"
-          }
-      },
-      "schemas": {
-          "Subscriber": {
-              "type": "object",
-              "properties": {
-                  "id": {
-                      "type": "string",
-                      "description": "The unique identifier for the subscriber."
-                  },
-                  "phoneNumber": {
-                      "type": "string",
-                      "uniqueItems": true,
-                      "description": "The phone number of the subscriber, which must be unique."
-                  },
-                  "defaultChannel": {
-                      "$ref": "#/components/schemas/SubscriptionChannel"
-                  },
-                  "SubscriberChannels": {
-                      "type": "array",
-                      "items": {
-                          "$ref": "#/components/schemas/SubscriberChannels"
-                      }
-                  },
-                  "createdAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The timestamp the subscriber was created."
-                  },
-                  "updatedAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The timestamp the subscriber was last updated."
-                  },
-                  "countryCode": {
-                      "type": "string",
-                      "description": "The country code of the subscriber."
-                  },
-                  "countryIso": {
-                      "type": "string",
-                      "description": "The ISO country code of the subscriber."
-                  },
-                  "verificationStatus": {
-                      "$ref": "#/components/schemas/Status"
-                  },
-                  "Events": {
-                      "type": "array",
-                      "items": {
-                          "$ref": "#/components/schemas/Event"
-                      }
-                  },
-                  "messages": {
-                      "type": "array",
-                      "items": {
-                          "$ref": "#/components/schemas/MessageAction"
-                      }
-                  }
-              }
-          },
-          "SubscriberChannels": {
-              "type": "object",
-              "properties": {
-                  "channel": {
-                      "$ref": "#/components/schemas/SubscriptionChannel"
-                  },
-                  "valid": {
-                      "$ref": "#/components/schemas/Status"
-                  }
-              }
-          },
-          "Event": {
-              "type": "object",
-              "properties": {
-                  "id": {
-                      "type": "string",
-                      "description": "The unique identifier for the event."
-                  },
-                  "name": {
-                      "type": "string",
-                      "description": "The name of the event."
-                  },
-                  "timestamp": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The timestamp the event occurred."
-                  },
-                  "channelType": {
-                      "type": "string",
-                      "description": "Type of channel used for the event."
-                  },
-                  "properties": {
-                      "type": "object",
-                      "additionalProperties": true,
-                      "description": "Additional properties related to the event stored as JSON."
-                  }
-              }
-          },
-          "SubscriptionChannel": {
-              "type": "string",
-              "enum": [
-                  "sms",
-                  "whatsapp",
-                  "telegram",
-                  "imessage"
-              ],
-              "description": "The types of subscription channels available."
-          },
-          "Status": {
-              "type": "string",
-              "enum": [
-                  "pending",
-                  "active",
-                  "inactive"
-              ],
-              "description": "The status of the subscription or channel validity."
-          }
+    "securitySchemes": {
+      "APIKeyAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API Key"
       }
-  },
-  "MessagePayload": {
-      "type": "object",
-      "properties": {
+    },
+    "schemas": {
+      "MessagePayload": {
+        "type": "object",
+        "properties": {
           "siteId": {
-              "type": "string"
+            "type": "string"
           },
           "name": {
-              "type": "string"
+            "type": "string"
           },
           "content": {
-              "type": "string"
+            "type": "string"
           }
-      },
-      "required": [
+        },
+        "required": [
           "siteId",
           "name",
           "content"
-      ]
-  },
-  "SubscriberPayload": {
-      "type": "object",
-      "properties": {
+        ]
+      },
+      "SubscriberPayload": {
+        "type": "object",
+        "properties": {
           "phoneNumber": {
-              "type": "string"
+            "type": "string"
           },
           "siteId": {
-              "type": "string"
+            "type": "string"
           }
-      },
-      "required": [
+        },
+        "required": [
           "phoneNumber",
           "siteId"
-      ]
-  },
-  "MessageResponseSuccess": {
-      "type": "object",
-      "properties": {
+        ]
+      },
+      "MessageResponseSuccess": {
+        "type": "object",
+        "properties": {
           "success": {
-              "type": "boolean"
+            "type": "boolean"
           },
           "message": {
-              "type": "object",
-              "properties": {
-                  "id": {
-                      "type": "string"
-                  },
-                  "title": {
-                      "type": "string"
-                  },
-                  "content": {
-                      "type": "string"
-                  },
-                  "siteId": {
-                      "type": "string"
-                  }
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "siteId": {
+                "type": "string"
               }
+            }
           },
           "publishQstash": {
-              "type": "boolean"
+            "type": "boolean"
           }
-      }
-  },
-  "SendMessagePayload": {
-      "type": "object",
-      "properties": {
+        }
+      },
+      "SendMessagePayload": {
+        "type": "object",
+        "properties": {
           "siteId": {
-              "type": "string"
+            "type": "string"
           },
           "recipients": {
-              "type": "array",
-              "items": {
-                  "type": "string"
-              }
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "messageId": {
-              "type": "string"
+            "type": "string"
           },
           "senderPhoneNumber": {
-              "type": "string",
-              "nullable": true
+            "type": "string",
+            "nullable": true
           },
           "sendAt": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
-      },
-      "required": [
+        },
+        "required": [
           "siteId",
           "recipients",
           "messageId"
-      ]
-  },
-  "ErrorResponse": {
-      "type": "object",
-      "properties": {
+        ]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
           "error": {
-              "type": "object",
-              "properties": {
-                  "code": {
-                      "type": "string"
-                  },
-                  "message": {
-                      "type": "string"
-                  },
-                  "doc_url": {
-                      "type": "string"
-                  }
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "doc_url": {
+                "type": "string"
               }
+            }
           }
+        }
       }
-  },
-  "responses": {
+    },
+    "responses": {
       "BadRequest": {
-          "description": "Bad Request - The request is malformed.",
-          "content": {
-              "application/json": {
-                  "schema": {
-                      "$ref": "#/components/schemas/ErrorResponse"
-                  },
-                  "example": {
-                      "error": {
-                          "code": "bad_request",
-                          "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
-                          "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
-                      }
-                  }
+        "description": "Bad Request - The request is malformed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": "bad_request",
+                "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
+                "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
               }
+            }
           }
+        }
       },
       "Unauthorized": {
-          "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
-          "content": {
-              "application/json": {
-                  "schema": {
-                      "$ref": "#/components/schemas/ErrorResponse"
-                  },
-                  "example": {
-                      "error": {
-                          "code": "unauthorized",
-                          "message": "Authentication credentials were not provided or are invalid.",
-                          "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
-                      }
-                  }
+        "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": "unauthorized",
+                "message": "Authentication credentials were not provided or are invalid.",
+                "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
               }
+            }
           }
+        }
       },
       "Forbidden": {
-          "description": "Forbidden - The client lacks proper permission.",
-          "content": {
-              "application/json": {
-                  "schema": {
-                      "$ref": "#/components/schemas/ErrorResponse"
-                  },
-                  "example": {
-                      "error": {
-                          "code": "forbidden",
-                          "message": "You do not have the necessary permissions for the resource.",
-                          "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
-                      }
-                  }
+        "description": "Forbidden - The client lacks proper permission.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": "forbidden",
+                "message": "You do not have the necessary permissions for the resource.",
+                "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
               }
+            }
           }
+        }
       },
       "NotFound": {
-          "description": "Not Found - The requested resource could not be found.",
-          "content": {
-              "application/json": {
-                  "schema": {
-                      "$ref": "#/components/schemas/ErrorResponse"
-                  },
-                  "example": {
-                      "error": {
-                          "code": "not_found",
-                          "message": "The requested resource could not be found.",
-                          "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
-                      }
-                  }
+        "description": "Not Found - The requested resource could not be found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": "not_found",
+                "message": "The requested resource could not be found.",
+                "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
               }
+            }
           }
+        }
       },
       "InternalServerError": {
-          "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
-          "content": {
-              "application/json": {
-                  "schema": {
-                      "$ref": "#/components/schemas/ErrorResponse"
-                  },
-                  "example": {
-                      "error": {
-                          "code": "internal_server_error",
-                          "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
-                          "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
-                      }
-                  }
+        "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "error": {
+                "code": "internal_server_error",
+                "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
+                "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
               }
+            }
           }
+        }
       }
+    }
   },
   "security": [
-      {
-          "APIKeyAuth": []
-      }
+    {
+      "APIKeyAuth": []
+    }
   ]
 }
