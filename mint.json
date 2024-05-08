@@ -1,7 +1,7 @@
 {
   "$schema": "api-reference/openapi.json",
   "name": "Sent Docs & API Reference",
-  "openapi": "api-reference/openapi.json",
+  "openapi": "api-reference/openapinew.json",
   "logo": {
     "dark": "/logo/sentblack.svg",
     "light": "/logo/light.svg"
