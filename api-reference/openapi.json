@@ -19,23 +19,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "siteId": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "content": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "siteId",
-                  "name",
-                  "content"
-                ]
+                "$ref": "#/components/schemas/MessagePayload"
               }
             }
           }
@@ -77,374 +61,116 @@
             }
           },
           "400": {
-            "description": "Bad Request - The request is malformed.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "bad_request",
-                    "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "unauthorized",
-                    "message": "Authentication credentials were not provided or are invalid.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "description": "Forbidden - The client lacks proper permission.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "forbidden",
-                    "message": "You do not have the necessary permissions for the resource.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
-            "description": "Not Found - The requested resource could not be found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "not_found",
-                    "message": "The requested resource could not be found.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotFound"
           },
           "500": {
-            "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve a list of messages",
+        "operationId": "getMessages",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number of the message list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of messages",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MessageResponseSuccess"
                       }
                     }
                   }
-                },
-                "example": {
-                  "error": {
-                    "code": "internal_server_error",
-                    "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/subscribers": {
-      "post": {
-        "summary": "Create a subscriber and handle their subscription status",
-        "operationId": "postSubscriber",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "phoneNumber": {
-                    "type": "string"
-                  },
-                  "siteId": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "phoneNumber",
-                  "siteId"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Subscriber is created or already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubscriberResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad Request - The request is malformed.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "bad_request",
-                    "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "unauthorized",
-                    "message": "Authentication credentials were not provided or are invalid.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "description": "Forbidden - The client lacks proper permission.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "forbidden",
-                    "message": "You do not have the necessary permissions for the resource.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
-            "description": "Not Found - The requested resource could not be found.",
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/messages/{messageId}": {
+      "get": {
+        "summary": "Retrieve details of a specific message",
+        "operationId": "getMessageById",
+        "parameters": [
+          {
+            "name": "messageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The unique identifier of the message"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the specific message",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "not_found",
-                    "message": "The requested resource could not be found.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
-                  }
+                  "$ref": "#/components/schemas/MessageResponseSuccess"
                 }
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
-            "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "internal_server_error",
-                    "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -463,35 +189,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "siteId": {
-                    "type": "string"
-                  },
-                  "recipients": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "messageId": {
-                    "type": "string"
-                  },
-                  "senderPhoneNumber": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "sendAt": {
-                    "type": "string",
-                    "format": "date-time",
-                    "nullable": true
-                  }
-                },
-                "required": [
-                  "siteId",
-                  "recipients",
-                  "messageId"
-                ]
+                "$ref": "#/components/schemas/SendMessagePayload"
               }
             }
           }
@@ -516,34 +214,151 @@
             }
           },
           "400": {
-            "description": "Bad Request - The request is malformed.",
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/messages/send/{sendId}": {
+      "get": {
+        "summary": "Get the status of a queued message send operation",
+        "operationId": "getSendStatus",
+        "parameters": [
+          {
+            "name": "sendId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique identifier for the send operation"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status of the send operation",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "Current status of the send operation (e.g., queued, sent, failed)"
                     }
                   }
-                },
-                "example": {
-                  "error": {
-                    "code": "bad_request",
-                    "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
-                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/subscribers": {
+      "post": {
+        "summary": "Create a subscriber and handle their subscription status",
+        "operationId": "postSubscriber",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubscriberPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscriber is created or already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriberResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/subscribers/{subscriberId}": {
+      "get": {
+        "summary": "Retrieve a subscriber's details",
+        "operationId": "getSubscriber",
+        "parameters": [
+          {
+            "name": "subscriberId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the subscriber",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of the subscriber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subscriber"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The request is malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -553,30 +368,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "unauthorized",
-                    "message": "Authentication credentials were not provided or are invalid.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -586,30 +378,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "forbidden",
-                    "message": "You do not have the necessary permissions for the resource.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -619,30 +388,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "not_found",
-                    "message": "The requested resource could not be found.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -652,33 +398,107 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "string"
-                        },
-                        "message": {
-                          "type": "string"
-                        },
-                        "doc_url": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "error": {
-                    "code": "internal_server_error",
-                    "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
-                    "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update subscriber details",
+        "operationId": "updateSubscriber",
+        "parameters": [
+          {
+            "name": "subscriberId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the subscriber to update",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "phoneNumber": {
+                    "type": "string",
+                    "description": "Updated phone number of the subscriber."
+                  },
+                  "siteId": {
+                    "type": "string",
+                    "description": "Updated site identifier for the subscriber."
                   }
                 }
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscriber updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subscriber"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a subscriber",
+        "operationId": "deleteSubscriber",
+        "parameters": [
+          {
+            "name": "subscriberId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the subscriber to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Subscriber deleted successfully"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -806,62 +626,66 @@
         }
       },
       "Subscriber": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "The unique identifier for the subscriber, automatically generated and managed."
-            },
-            "phoneNumber": {
-              "type": "string",
-              "description": "The phone number of the subscriber, which must be unique across all subscribers."
-            },
-            "defaultChannel": {
-              "$ref": "#/components/schemas/SubscriptionChannel"
-            },
-            "SubscriberChannels": {
-              "type": "array",
-              "description": "The list of all subscribed channels by the subscriber, providing details on the status and specific configurations of each.",
-              "items": {
-                "$ref": "#/components/schemas/SubscriberChannels"
-              }
-            },
-            "createdAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "The timestamp indicating when the subscriber was first created in the system, formatted as a date-time string."
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "The timestamp indicating when the subscriber information was last updated, formatted as a date-time string."
-            },
-            "countryCode": {
-              "type": "string",
-              "description": "The country code associated with the subscriber's phone number."
-            },
-            "countryIso": {
-              "type": "string",
-              "description": "The ISO country code representing the subscriber's country of residence."
-            },
-            "verificationStatus": {
-              "type": "string",
-              "enum": ["pending", "active", "inactive"],
-              "description": "The current verification status of the subscriber."
-            },
-            "Events": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Event"
-              }
-            },
-            "messages": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/MessageAction"
-              }
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the subscriber, automatically generated and managed."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The phone number of the subscriber, which must be unique across all subscribers."
+          },
+          "defaultChannel": {
+            "$ref": "#/components/schemas/SubscriptionChannel"
+          },
+          "SubscriberChannels": {
+            "type": "array",
+            "description": "The list of all subscribed channels by the subscriber, providing details on the status and specific configurations of each.",
+            "items": {
+              "$ref": "#/components/schemas/SubscriberChannels"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the subscriber was first created in the system, formatted as a date-time string."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the subscriber information was last updated, formatted as a date-time string."
+          },
+          "countryCode": {
+            "type": "string",
+            "description": "The country code associated with the subscriber's phone number."
+          },
+          "countryIso": {
+            "type": "string",
+            "description": "The ISO country code representing the subscriber's country of residence."
+          },
+          "verificationStatus": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "active",
+              "inactive"
+            ],
+            "description": "The current verification status of the subscriber."
+          },
+          "Events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            }
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageAction"
             }
           }
+        }
       },
       "SubscriberResponse": {
         "type": "object",
@@ -878,73 +702,81 @@
         }
       },
       "Event": {
-          "type": "object",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the event, automatically generated and managed."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the event."
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the event occurred, automatically set to the current time."
+          },
+          "channelType": {
+            "type": "string",
+            "description": "The communication channel type used during the event."
+          },
           "properties": {
-            "id": {
-              "type": "string",
-              "description": "The unique identifier for the event, automatically generated and managed."
-            },
-            "name": {
-              "type": "string",
-              "description": "The name of the event."
-            },
-            "timestamp": {
-              "type": "string",
-              "format": "date-time",
-              "description": "The timestamp when the event occurred, automatically set to the current time."
-            },
-            "channelType": {
-              "type": "string",
-              "description": "The communication channel type used during the event."
-            },
-            "properties": {
-              "type": "object",
-              "description": "Additional JSON formatted properties related to the event."
-            }
+            "type": "object",
+            "description": "Additional JSON formatted properties related to the event."
           }
+        }
       },
       "SubscriptionChannel": {
-          "type": "string",
-          "enum": ["sms", "whatsapp", "telegram", "imessage"],
-          "description": "The types of subscription channels available."
+        "type": "string",
+        "enum": [
+          "sms",
+          "whatsapp",
+          "telegram",
+          "imessage"
+        ],
+        "description": "The types of subscription channels available."
       },
       "SubscriberChannels": {
-          "type": "object",
-          "properties": {
-            "channel": {
-              "$ref": "#/components/schemas/SubscriptionChannel"
-            },
-            "valid": {
-              "type": "string",
-              "enum": ["pending", "valid", "invalid"],
-              "default": "pending",
-              "description": "Current status of the channel, automatically set to pending."
-            }
+        "type": "object",
+        "properties": {
+          "channel": {
+            "$ref": "#/components/schemas/SubscriptionChannel"
+          },
+          "valid": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "valid",
+              "invalid"
+            ],
+            "default": "pending",
+            "description": "Current status of the channel, automatically set to pending."
           }
+        }
       },
       "MessageAction": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "Unique identifier of the message."
-            },
-            "title": {
-              "type": "string",
-              "description": "Title or subject of the message."
-            },
-            "content": {
-              "type": "string",
-              "description": "The actual content of the message."
-            },
-            "timestamp": {
-              "type": "string",
-              "format": "date-time",
-              "description": "The date and time when the message was sent or received."
-            }
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the message."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title or subject of the message."
+          },
+          "content": {
+            "type": "string",
+            "description": "The actual content of the message."
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the message was sent or received."
           }
+        }
       }
-      
     },
     "responses": {
       "BadRequest": {
