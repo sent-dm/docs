@@ -405,7 +405,7 @@
           }
         }
       },
-      "patch": {
+      "put": {
         "summary": "Update subscriber details",
         "operationId": "updateSubscriber",
         "parameters": [
