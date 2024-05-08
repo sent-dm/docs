@@ -65,18 +65,28 @@
       "pages": [
         "api-reference/introduction",
         "api-reference/errors",
-        {
-          "group": "messages",
+        { "group": "Subscribers", 
           "pages": [
-            "api-reference/message/create-message-template",
-            "api-reference/message/send/send-message"
+            "api-reference/subscriber/create-subscriber",
+            "api-reference/subscriber/retrieve-a-subscriber",
+            "api-reference/subscriber/delete-a-subscriber",
+            "api-reference/subscriber/update-subscriber"
+            ] 
+          },
+        {
+          "group": "Message Templates",
+          "pages": [
+            "api-reference/message/retrieve-a-list-of-messages",
+            "api-reference/message/retrieve-details-of-a-specific-message"
           ]
         },
-        { "group": "subscriber", 
+        {
+          "group": "Messages",
           "pages": [
-            "api-reference/subscriber/create-subscriber"
-            ] 
-          }
+            "api-reference/message/send/get-the-status-of-a-message-send-operation",
+            "api-reference/message/send/send-message"
+          ]
+        }
       ]
     },
     {
