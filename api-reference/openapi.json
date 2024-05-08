@@ -1,4 +1,4 @@
-{ 
+{
 
   "openapi": "3.0.0",
   "info": {
@@ -56,21 +56,6 @@
       },
       "/subscribers": {
           "post": {
-              "400": {
-                  "$ref": "#/components/responses/BadRequest"
-              },
-              "401": {
-                  "$ref": "#/components/responses/Unauthorized"
-              },
-              "403": {
-                  "$ref": "#/components/responses/Forbidden"
-              },
-              "404": {
-                  "$ref": "#/components/responses/NotFound"
-              },
-              "500": {
-                  "$ref": "#/components/responses/InternalServerError"
-              },
               "summary": "Create a subscriber and handle their subscription status",
               "operationId": "postSubscriber",
               "requestBody": {
@@ -115,7 +100,22 @@
                               }
                           }
                       }
-                  }
+                  },
+                  "400": {
+                    "$ref": "#/components/responses/BadRequest"
+                },
+                "401": {
+                    "$ref": "#/components/responses/Unauthorized"
+                },
+                "403": {
+                    "$ref": "#/components/responses/Forbidden"
+                },
+                "404": {
+                    "$ref": "#/components/responses/NotFound"
+                },
+                "500": {
+                    "$ref": "#/components/responses/InternalServerError"
+                }
               }
           }
       }

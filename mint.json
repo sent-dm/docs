@@ -1,7 +1,7 @@
 {
-  "$schema": "api-reference/openapi.json",
+  "$schema": "https://mintlify.com/schema.json",
   "name": "Sent Docs & API Ref",
-  "openapi": "api-reference/openapinew.json",
+  "openapi": "api-reference/openapi.json",
   "logo": {
     "dark": "/logo/sentblack.svg",
     "light": "/logo/light.svg"
@@ -47,11 +47,7 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": [
-        "introduction",
-        "quickstart",
-        "development"
-      ]
+      "pages": ["introduction", "quickstart", "development"]
     },
     {
       "group": "Essentials",
@@ -67,8 +63,20 @@
     {
       "group": "API Documentation",
       "pages": [
-        "api-reference/introduction"
-
+        "api-reference/introduction",
+        "api-reference/errors",
+        {
+          "group": "messages",
+          "pages": [
+            "api-reference/create-message-template",
+            "api-reference/send/send-message"
+          ]
+        },
+        { "group": "subscriber", 
+          "pages": [
+            "api-reference/create-subscriber"
+            ] 
+          }
       ]
     },
     {
