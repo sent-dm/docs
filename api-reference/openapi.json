@@ -12,7 +12,7 @@
   "paths": {
     "/messages": {
       "post": {
-        "summary": "Post a new message and publish to a message queue",
+        "summary": "Create a new message template",
         "operationId": "postMessage",
         "requestBody": {
           "required": true,
@@ -26,7 +26,7 @@
         },
         "responses": {
           "200": {
-            "description": "Successfully created the message and published to queue",
+            "description": "Successfully created the message template",
             "content": {
               "application/json": {
                 "schema": {
@@ -51,9 +51,6 @@
                           "type": "string"
                         }
                       }
-                    },
-                    "publishQstash": {
-                      "type": "boolean"
                     }
                   }
                 }
@@ -78,7 +75,7 @@
         }
       },
       "get": {
-        "summary": "Retrieve a list of messages",
+        "summary": "Retrieve a list of message templates",
         "operationId": "getMessages",
         "parameters": [
           {
@@ -88,12 +85,12 @@
               "type": "integer",
               "default": 1
             },
-            "description": "Page number of the message list"
+            "description": "Page number of the message template list"
           }
         ],
         "responses": {
           "200": {
-            "description": "A list of messages",
+            "description": "A list of message templates",
             "content": {
               "application/json": {
                 "schema": {
@@ -133,7 +130,7 @@
     },
     "/messages/{messageId}": {
       "get": {
-        "summary": "Retrieve details of a specific message",
+        "summary": "Retrieve details of a specific message template",
         "operationId": "getMessageById",
         "parameters": [
           {
@@ -143,12 +140,12 @@
             "schema": {
               "type": "string"
             },
-            "description": "The unique identifier of the message"
+            "description": "The unique identifier of the message template"
           }
         ],
         "responses": {
           "200": {
-            "description": "Details of the specific message",
+            "description": "Details of the specific message template",
             "content": {
               "application/json": {
                 "schema": {
@@ -177,7 +174,7 @@
     },
     "/messages/send": {
       "post": {
-        "summary": "Queue a message for sending at a specified time",
+        "summary": "Queue message sending operation for immediate or scheduled processing",
         "operationId": "queueMessage",
         "security": [
           {
@@ -286,7 +283,7 @@
     },
     "/subscribers": {
       "post": {
-        "summary": "Create a subscriber and handle their subscription status",
+        "summary": "Create a new subscriber contact",
         "operationId": "postSubscriber",
         "requestBody": {
           "required": true,
@@ -300,7 +297,7 @@
         },
         "responses": {
           "200": {
-            "description": "Subscriber is created or already exists",
+            "description": "Subscriber has been successfully created or already exists.",
             "content": {
               "application/json": {
                 "schema": {
@@ -329,7 +326,7 @@
     },
     "/subscribers/{subscriberId}": {
       "get": {
-        "summary": "Retrieve a subscriber's details",
+        "summary": "Retrieve a subscriber's details by ID",
         "operationId": "getSubscriber",
         "parameters": [
           {
@@ -340,6 +337,26 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "includeEvents",
+            "in": "query",
+            "required": false,
+            "description": "Set to `true` to include associated events in the response",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "includeMessages",
+            "in": "query",
+            "required": false,
+            "description": "Set to `true` to include associated messages in the response",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -348,60 +365,25 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Subscriber"
+                  "$ref": "#/components/schemas/SubscriberWithOptionalFields"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad Request - The request is malformed.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
-            "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
-            "description": "Forbidden - The client lacks proper permission.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/Forbidden"
           },
           "404": {
-            "description": "Not Found - The requested resource could not be found.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotFound"
           },
           "500": {
-            "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -426,13 +408,8 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "phoneNumber": {
-                    "type": "string",
-                    "description": "Updated phone number of the subscriber."
-                  },
-                  "siteId": {
-                    "type": "string",
-                    "description": "Updated site identifier for the subscriber."
+                  "defaultChannel": {
+                    "$ref": "#/components/schemas/SubscriptionChannel"
                   }
                 }
               }
@@ -445,7 +422,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Subscriber"
+                  "$ref": "#/components/schemas/SubscriberBase"
                 }
               }
             }
@@ -483,7 +460,19 @@
         ],
         "responses": {
           "204": {
-            "description": "Subscriber deleted successfully"
+            "description": "Subscriber deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
@@ -606,25 +595,6 @@
           "messageId"
         ]
       },
-      "ErrorResponse": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "object",
-            "properties": {
-              "code": {
-                "type": "string"
-              },
-              "message": {
-                "type": "string"
-              },
-              "doc_url": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
       "Subscriber": {
         "type": "object",
         "properties": {
@@ -696,8 +666,9 @@
           "message": {
             "type": "string"
           },
-          "subscriber": {
-            "$ref": "#/components/schemas/Subscriber"
+          "subscriberId": {
+            "type": "string",
+            "description": "The unique identifier of the subscriber"
           }
         }
       },
@@ -776,6 +747,82 @@
             "description": "The date and time when the message was sent or received."
           }
         }
+      },
+      "SubscriberBase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the subscriber, automatically generated and managed."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The phone number of the subscriber, which must be unique across all subscribers."
+          },
+          "defaultChannel": {
+            "$ref": "#/components/schemas/SubscriptionChannel"
+          },
+          "SubscriberChannels": {
+            "type": "array",
+            "description": "The list of all subscribed channels by the subscriber, providing details on the status and specific configurations of each.",
+            "items": {
+              "$ref": "#/components/schemas/SubscriberChannels"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the subscriber was first created in the system, formatted as a date-time string."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp indicating when the subscriber information was last updated, formatted as a date-time string."
+          },
+          "countryCode": {
+            "type": "string",
+            "description": "The country code associated with the subscriber's phone number."
+          },
+          "countryIso": {
+            "type": "string",
+            "description": "The ISO country code representing the subscriber's country of residence."
+          },
+          "verificationStatus": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "active",
+              "inactive"
+            ],
+            "description": "The current verification status of the subscriber."
+          }
+        }
+      },
+      "SubscriberWithOptionalFields": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SubscriberBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Events": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Event"
+                },
+                "description": "A list of events associated with the subscriber"
+              },
+              "messages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MessageAction"
+                },
+                "description": "A list of messages associated with the subscriber"
+              }
+            }
+          }
+        ]
       }
     },
     "responses": {
