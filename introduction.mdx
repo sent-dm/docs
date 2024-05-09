@@ -1,9 +1,11 @@
 ---
-title: Introduction - Sent.dm
-description: 'Documentation & API Reference'
+title: Introduction
+"og:title": "Getting Started with Sent - Documentation"
+description: "Sent is a unified api for sending messages across SMS and apps like Whatsapp and iMessage."
 ---
 
-<img
+<Frame>
+  <img
   className="block dark:hidden"
   src="/images/thumbnail.png"
   alt="Hero Light"
@@ -13,59 +15,47 @@ description: 'Documentation & API Reference'
   src="/images/thumbnail.png"
   alt="Hero Dark"
 />
+</Frame>
 
-## Setting up
+## Features
 
-The first step to world-class documentation is setting up your editing environments.
+Here are some of the features that Sent offers:
+
+<AccordionGroup>
+<Accordion title="Channel Identification" icon="message">
+    Sent automatically identifies a contact's primary messaging channel with just a phone number. Sent also manages alternative / fallback communication channels to ensure deliverability.
+  </Accordion>
+
+<Accordion title="Easy Personalization" icon="pencil">
+    Sent lets you create message templates that you can reuse. You can also personalize templates by adding dynamic fields and media components.
+</Accordion>
+
+<Accordion title="Content Transformation" icon="code">
+    Sent automatically configures and formats your templates based on the schema requirements of each messaging channel, ensuring seamless cross-channel compatibility and recipient experiences.
+</Accordion>
+
+<Accordion title="Advanced Analytics" icon="chart-line">
+    Sent provides powerful analytics for your contacts and messages, including opens, read receipts, media/link interactions, as well as on-site events.
+</Accordion>
+
+
+</AccordionGroup>
+
+## Getting Started
+
+To get started with Sent, you can do any of the following:
 
 <CardGroup cols={2}>
-  <Card
-    title="Edit Your Docs"
-    icon="pen-to-square"
-    href="https://mintlify.com/docs/quickstart"
-  >
-    Get your docs set up locally for easy development
+  <Card title="Try our API" icon="code" href="/api-reference/introduction">
+    Learn how to use Sent's API to create and manage links programmatically
   </Card>
-  <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
-  >
-    Preview your changes before you push to make sure they're perfect
+    <Card title="SDKs" icon="code" href="/sdks/overview">
+    Get started with Sent's SDKs
   </Card>
-</CardGroup>
-
-## Make it yours
-
-Update your docs to your brand and add valuable content for the best user conversion.
-
-<CardGroup cols={2}>
-  <Card
-    title="Customize Style"
-    icon="palette"
-    href="https://mintlify.com/docs/settings/global"
-  >
-    Customize your docs to your company's colors and brands
+  <Card title="Concepts" icon="building" href="/datamodels">
+    Learn about how Sent works and our data model is structured
   </Card>
-  <Card
-    title="Reference APIs"
-    icon="code"
-    href="https://mintlify.com/docs/api-playground/openapi"
-  >
-    Automatically generate endpoints from an OpenAPI spec
-  </Card>
-  <Card
-    title="Add Components"
-    icon="screwdriver-wrench"
-    href="https://mintlify.com/docs/components/accordion"
-  >
-    Build interactive features and designs to guide your users
-  </Card>
-  <Card
-    title="Get Inspiration"
-    icon="stars"
-    href="https://mintlify.com/customers"
-  >
-    Check out our showcase of our favorite documentation
+  <Card title="Integrate with Sent" icon="circle-nodes" href="/integrations">
+    Learn how to integrate Sent with your favorite tools
   </Card>
 </CardGroup>
