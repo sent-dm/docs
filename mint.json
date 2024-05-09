@@ -54,15 +54,15 @@
       "pages": ["introduction", "datamodels"]
     },
     {
-      "group": "Essentials",
+      "group": "Sdks",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
+        "sdks/overview",
+        { "group": "Typescript", 
+          "pages": [
+            "sdks/typescript"
+            ] 
+          }
+        ]
     },
     {
       "group": "API Documentation",
