@@ -324,16 +324,23 @@
         }
       }
     },
-    "/subscribers/{subscriberId}": {
+    "/subscribers/{siteId}/{subscriberId}": {
       "get": {
-        "summary": "Retrieve a subscriber's details by ID",
+        "summary": "Retrieve a subscriber's details by site ID and subscriber ID",
         "operationId": "getSubscriber",
         "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "subscriberId",
             "in": "path",
             "required": true,
-            "description": "The unique identifier of the subscriber",
             "schema": {
               "type": "string"
             }
@@ -342,7 +349,7 @@
             "name": "includeEvents",
             "in": "query",
             "required": false,
-            "description": "Set to `true` to include associated events in the response",
+            "description": "Include associated events in the response",
             "schema": {
               "type": "boolean",
               "default": false
@@ -352,7 +359,7 @@
             "name": "includeMessages",
             "in": "query",
             "required": false,
-            "description": "Set to `true` to include associated messages in the response",
+            "description": "Include associated messages in the response",
             "schema": {
               "type": "boolean",
               "default": false
@@ -392,10 +399,17 @@
         "operationId": "updateSubscriber",
         "parameters": [
           {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "subscriberId",
             "in": "path",
             "required": true,
-            "description": "The unique identifier of the subscriber to update",
             "schema": {
               "type": "string"
             }
@@ -449,10 +463,17 @@
         "operationId": "deleteSubscriber",
         "parameters": [
           {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "subscriberId",
             "in": "path",
             "required": true,
-            "description": "The unique identifier of the subscriber to delete",
             "schema": {
               "type": "string"
             }
@@ -853,7 +874,7 @@
               "error": {
                 "code": "bad_request",
                 "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
-                "doc_url": "https://sent.dev/docs/api-reference/errors#bad_request"
+                "doc_url": "https://docs.sent.dm/api-reference/errors#bad_request"
               }
             }
           }
@@ -886,7 +907,7 @@
               "error": {
                 "code": "unauthorized",
                 "message": "Authentication credentials were not provided or are invalid.",
-                "doc_url": "https://sent.dev/docs/api-reference/errors#unauthorized"
+                "doc_url": "https://docs.sent.dm/api-reference/errors#unauthorized"
               }
             }
           }
@@ -919,7 +940,7 @@
               "error": {
                 "code": "forbidden",
                 "message": "You do not have the necessary permissions for the resource.",
-                "doc_url": "https://sent.dev/docs/api-reference/errors#forbidden"
+                "doc_url": "https://docs.sent.dm/api-reference/errors#forbidden"
               }
             }
           }
@@ -952,7 +973,7 @@
               "error": {
                 "code": "not_found",
                 "message": "The requested resource could not be found.",
-                "doc_url": "https://sent.dev/docs/api-reference/errors#not_found"
+                "doc_url": "https://docs.sent.dm/api-reference/errors#not_found"
               }
             }
           }
@@ -985,7 +1006,7 @@
               "error": {
                 "code": "internal_server_error",
                 "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
-                "doc_url": "https://sent.dev/docs/api-reference/errors#internal_server_error"
+                "doc_url": "https://docs.sent.dm/api-reference/errors#internal_server_error"
               }
             }
           }
