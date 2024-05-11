@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "Sent Docs & API Ref",
-  "openapi": "api-reference/openapi.json",
+  "openapi": "https://sent.dm/openapi.yaml",
   "seo": {
     "indexHiddenPages": true
   },
@@ -51,7 +51,7 @@
     },
     {
       "name": "Help Center",
-      "icon": "support",
+      "icon": "handshake-angle",
       "url": "https://docs.sent.dm/contact-us"
     }
   ],
