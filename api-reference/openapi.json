@@ -73,11 +73,22 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         }
-      },
+      }
+    },
+    "/messages/{siteId}": {
       "get": {
-        "summary": "Retrieve a list of message templates",
-        "operationId": "getMessages",
+        "summary": "List messages for a site with optional pagination.",
+        "operationId": "listMessagesBySiteId",
         "parameters": [
+          {
+            "in": "path",
+            "name": "siteId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The site ID"
+          },
           {
             "in": "query",
             "name": "page",
@@ -85,24 +96,39 @@
               "type": "integer",
               "default": 1
             },
-            "description": "Page number of the message template list"
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Number of items per page"
           }
         ],
         "responses": {
           "200": {
-            "description": "A list of message templates",
+            "description": "An array of messages for the site.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": {
-                      "type": "boolean"
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pageSize": {
+                      "type": "integer"
+                    },
+                    "totalCount": {
+                      "type": "integer"
                     },
                     "messages": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/MessageResponseSuccess"
+                        "$ref": "#/components/schemas/Message"
                       }
                     }
                   }
@@ -128,28 +154,37 @@
         }
       }
     },
-    "/messages/{messageId}": {
+    "/messages/{siteId}/{messageId}": {
       "get": {
-        "summary": "Retrieve details of a specific message template",
-        "operationId": "getMessageById",
+        "summary": "Get a single message by site ID and message ID.",
+        "operationId": "getMessageBySiteIdAndMessageId",
         "parameters": [
           {
-            "name": "messageId",
             "in": "path",
+            "name": "siteId",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "description": "The unique identifier of the message template"
+            "description": "The site ID"
+          },
+          {
+            "in": "path",
+            "name": "messageId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The message ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "Details of the specific message template",
+            "description": "A single message detail.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MessageResponseSuccess"
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -326,7 +361,7 @@
     },
     "/subscribers/{siteId}/{subscriberId}": {
       "get": {
-        "summary": "Retrieve a subscriber's details by site ID and subscriber ID",
+        "summary": "Retrieve a subscriber's details by ID",
         "operationId": "getSubscriber",
         "parameters": [
           {
@@ -481,19 +516,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Subscriber deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Subscriber deleted successfully"
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
@@ -523,6 +546,78 @@
       }
     },
     "schemas": {
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "siteId": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "templates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageTemplate"
+            }
+          }
+        }
+      },
+      "MessageTemplate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          },
+          "channelType": {
+            "$ref": "#/components/schemas/SubscriptionChannel"
+          },
+          "content": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "SubscriptionChannel": {
+        "type": "string",
+        "enum": [
+          "sms",
+          "whatsapp",
+          "telegram",
+          "imessage"
+        ]
+      },
       "MessagePayload": {
         "type": "object",
         "properties": {
@@ -715,19 +810,9 @@
           },
           "properties": {
             "type": "object",
-            "description": "Additional JSON formatted properties related to the event."
+            "description": "Additional JSON formatted properties related to the event"
           }
         }
-      },
-      "SubscriptionChannel": {
-        "type": "string",
-        "enum": [
-          "sms",
-          "whatsapp",
-          "telegram",
-          "imessage"
-        ],
-        "description": "The types of subscription channels available."
       },
       "SubscriberChannels": {
         "type": "object",

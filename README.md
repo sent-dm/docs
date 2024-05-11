@@ -21,6 +21,7 @@ Run the following command at the root of your documentation (where mint.json is)
 ```
 mintlify dev
 ```
+npx @mintlify/scraping@latest openapi-file https://sent.dm/openapi.json
 
 ### Publishing Changes
 
