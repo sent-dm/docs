@@ -5,6 +5,10 @@
   "seo": {
     "indexHiddenPages": true
   },
+  "feedback": {
+    "thumbsRating": true,
+    "raiseIssue": false
+  },
   "logo": {
     "dark": "/logo/sent1.png",
     "light": "/logo/sent.png"
@@ -41,19 +45,19 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://docs.sent.dm"
+      "name": "Github",
+      "icon": "github",
+      "url": "https://github.com/sentdm"
     },
     {
-      "name": "Contact",
-      "icon": "message",
-      "url": "https://sent.dm/contact-us"
+      "name": "Help Center",
+      "icon": "support",
+      "url": "https://docs.sent.dm/contact-us"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Getting Started",
       "pages": ["introduction", "datamodels"]
     },
     {
@@ -95,14 +99,6 @@
             "api-reference/message/send/send-message"
           ]
         }
-      ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/subscriber/create-subscriber",
-        "api-reference/message/create-message-template",
-        "api-reference/message/send/send-message"
       ]
     }
   ],
