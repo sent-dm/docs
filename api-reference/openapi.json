@@ -263,11 +263,20 @@
         }
       }
     },
-    "/messages/send/{sendId}": {
+    "/messages/send/{siteId}/{sendId}": {
       "get": {
-        "summary": "Get the status of a queued message send operation",
+        "summary": "Get the status of a message send operation",
         "operationId": "getSendStatus",
         "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique identifier for the site"
+          },
           {
             "name": "sendId",
             "in": "path",
@@ -280,23 +289,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Status of the send operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    },
-                    "status": {
-                      "type": "string",
-                      "description": "Current status of the send operation (e.g., queued, sent, failed)"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/MessageJobPayloadResponse"
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
@@ -711,6 +704,58 @@
           "messageId"
         ]
       },
+      "MessageJobPayloadResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "cHJvZHVjdEBwcm94aW5jLmNvbS5hd",
+              "description": "The unique identifier for the message job payload"
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "operationId": {
+                    "type": "string",
+                    "example": "cHJvZHVjdEBwcm94aW5jLmNvbS5hd",
+                    "description": "ID of the message action operation"
+                  },
+                  "to": {
+                    "type": "string",
+                    "example": "+19715555555",
+                    "description": "Phone number of the recipient"
+                  },
+                  "recipientId": {
+                    "type": "string",
+                    "example": "1",
+                    "description": "ID of the recipient's subscription"
+                  },
+                  "channel": {
+                    "type": "string",
+                    "example": "sms",
+                    "description": "Channel type for the message"
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "sent",
+                    "description": "Status of the message"
+                  },
+                  "lastUpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-10-12T07:20:50.52Z",
+                    "description": "The last updated timestamp of the message status"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "Subscriber": {
         "type": "object",
         "properties": {
@@ -932,6 +977,16 @@
       }
     },
     "responses": {
+      "MessageJobPayloadResponse": {
+        "description": "Array of message job payloads",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/MessageJobPayloadResponse"
+            }
+          }
+        }
+      },
       "BadRequest": {
         "description": "Bad Request - The request is malformed.",
         "content": {
