@@ -35,10 +35,6 @@
   },
   "tabs": [
     {
-      "name": "Docs",
-      "url": "introduction"
-    },
-    {
       "name": "API Reference",
       "url": "api-reference/introduction"
     },
@@ -63,17 +59,6 @@
     {
       "group": "Getting Started",
       "pages": ["introduction", "datamodels"]
-    },
-    {
-      "group": "Sdks",
-      "pages": [
-        "sdks/overview",
-        { "group": "Typescript", 
-          "pages": [
-            "sdks/typescript"
-            ] 
-          }
-        ]
     },
     {
       "group": "API Documentation",
@@ -104,6 +89,17 @@
           ]
         }
       ]
+    },
+    {
+      "group": "Sdks",
+      "pages": [
+        "sdks/overview",
+        { "group": "Typescript", 
+          "pages": [
+            "sdks/typescript"
+            ] 
+          }
+        ]
     }
   ],
   "footerSocials": {
