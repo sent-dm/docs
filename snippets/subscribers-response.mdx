@@ -38,10 +38,13 @@ A collection of events related to the subscriber, each detailing the nature and 
   - `channelType`: Type of channel used during the event (e.g., 'sms', 'telegram')
   - `properties`: Additional properties and details about the event stored in a JSON format
 
-### `messages` (array of objects, optional)
-The messages sent to or from the subscriber through various channels.
-- Each message contains:
-  - `id`: Unique identifier of the message
-  - `title`: Title or subject of the message
-  - `content`: The actual content of the message
-  - `timestamp`: The date and time when the message was sent or received
+### `messageActions` (array of objects, optional)
+The message actions sent to or from the subscriber through various channels.
+- Each message action contains:
+  - `id`: The unique identifier of the message action, automatically generated and managed.
+  - `transactionId`: Unique identifier for the transaction related to the message action.
+  - `to`: The phone number of the recipient.
+  - `recipientId`: The ID of the recipient's subscription.
+  - `channel`: The channel type for the message (e.g., 'sms', 'telegram').
+  - `status`: The delivery status of the message action.
+  - `lastUpdatedAt`: Timestamp indicating the last update to the message action, formatted as a date-time string.

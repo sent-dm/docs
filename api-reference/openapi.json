@@ -607,12 +607,7 @@
       },
       "SubscriptionChannel": {
         "type": "string",
-        "enum": [
-          "sms",
-          "whatsapp",
-          "telegram",
-          "imessage"
-        ]
+        "enum": ["sms", "whatsapp", "telegram", "imessage"]
       },
       "MessagePayload": {
         "type": "object",
@@ -627,11 +622,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "siteId",
-          "name",
-          "content"
-        ]
+        "required": ["siteId", "name", "content"]
       },
       "SubscriberPayload": {
         "type": "object",
@@ -643,10 +634,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "phoneNumber",
-          "siteId"
-        ]
+        "required": ["phoneNumber", "siteId"]
       },
       "MessageResponseSuccess": {
         "type": "object",
@@ -701,11 +689,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "siteId",
-          "recipients",
-          "messageId"
-        ]
+        "required": ["siteId", "recipients", "messageId"]
       },
       "MessageJobPayloadResponse": {
         "type": "array",
@@ -800,11 +784,7 @@
           },
           "verificationStatus": {
             "type": "string",
-            "enum": [
-              "pending",
-              "active",
-              "inactive"
-            ],
+            "enum": ["pending", "active", "inactive"],
             "description": "The current verification status of the subscriber."
           },
           "Events": {
@@ -870,11 +850,7 @@
           },
           "valid": {
             "type": "string",
-            "enum": [
-              "pending",
-              "valid",
-              "invalid"
-            ],
+            "enum": ["pending", "valid", "invalid"],
             "default": "pending",
             "description": "Current status of the channel, automatically set to pending."
           }
@@ -943,11 +919,7 @@
           },
           "verificationStatus": {
             "type": "string",
-            "enum": [
-              "pending",
-              "active",
-              "inactive"
-            ],
+            "enum": ["pending", "active", "inactive"],
             "description": "The current verification status of the subscriber."
           }
         }

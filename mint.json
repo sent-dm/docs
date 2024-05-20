@@ -35,8 +35,12 @@
   },
   "tabs": [
     {
+      "name": "Docs",
+      "url": "introduction"
+    },
+    {
       "name": "API Reference",
-      "url": "api-reference"
+      "url": "api-reference/introduction"
     },
     {
       "name": "SDKs",
@@ -93,9 +97,9 @@
           ]
         },
         {
-          "group": "Messages",
+          "group": "Message Actions",
           "pages": [
-            "api-reference/message/send/get-the-status-of-a-message-send-operation",
+            "api-reference/message/send/get-the-status-of-a-message-action",
             "api-reference/message/send/send-message"
           ]
         }

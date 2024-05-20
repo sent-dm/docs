@@ -11,13 +11,17 @@ import MessageResponse from "/snippets/message-model.mdx";
 
 Whether you are using Sent's [API](/api-reference/introduction) or not, this page is a quick way to understand how Sent works.
 
-Within Sent, all data belongs to a [**Site**](#site). Within a Site, you have [Subscribers](#subscribers), [Message Templates](#message-templates), [Message Actions](#message-actions), and more.
+Within Sent, all data belongs to a [**Site**](#site). Within a Site, you have [Subscribers](#subscribers), [Message Templates](#message-templates), [Message Actions](#message-actions), and [Messages](#messages).
 
 ## Site
 
 [Sites](https://sent.dm/help/article/what-is-a-workspace) are the main organizational units within Sent, akin to a project or application in other platforms. Each site represents an independent environment for handling messaging operations, including subscriber management, message sending, and analytics. Sites are isolated, ensuring that data and operations do not overlap across different sites. You can invite team members to collaborate within a site, where they can manage subscribers, create message templates, and track message performance.
 
-When interacting with Sent's API, you will need to specify the [Site ID](/api-reference/introduction#site-id) to perform any operation. You can find the site ID under the **General** settings page of your Sent dashboard.
+When interacting with Sent's API, you will need to specify the [Site ID](/api-reference/introduction#site-id) to perform any operation. You can find the site ID under the **General** settings page of your site.
+
+<Accordion title="Site model">
+  <SiteResponse />
+</Accordion>
 
 ## Subscribers
 
@@ -27,26 +31,71 @@ When interacting with Sent's API, you will need to specify the [Site ID](/api-re
   <SubscriberResponse />
 </Accordion>
 
-## Message Templates
+## Message Model
+// messages include templates, and actions
 
-[Message Templates](https://sent.dm/help/article/what-are-message-templates) allow you to create reusable content for messages. These templates can be used to send consistent messages across different channels. Message Templates can be created, updated, and managed through the Sent API or the Sent dashboard.
+### `id` (string, required)
+The unique identifier for the message, automatically generated and managed.
 
-<Accordion title="Message Template model">
-  <MessageTemplateResponse />
-</Accordion>
+### `title` (string, required)
+The title or subject of the message.
 
-## Message Actions
+### `siteId` (string, required)
+The unique identifier of the site to which the message belongs.
 
-[Message Actions](https://sent.dm/help/article/what-are-message-actions) represent the different operations or activities related to messages. This includes sending messages, tracking message statuses, and handling responses. Message Actions can be monitored and managed using the Sent API or the Sent dashboard.
+### `content` (string, required)
+The content of the message.
 
-<Accordion title="Message Action model">
-  <MessageActionResponse />
-</Accordion>
+### `createdAt` (DateTime, required)
+The timestamp indicating when the message was first created in the system, formatted as a date-time string.
 
-## Messages
+### `updatedAt` (DateTime, required)
+The timestamp indicating when the message information was last updated, formatted as a date-time string.
 
-[Messages](https://sent.dm/help/article/what-are-messages) are the actual bits of communication sent to subscribers. These messages can be structured and tracked via the Sent API and dashboard.
+### `templates` (array of objects, optional)
+A collection of templates used for the message.
+- Each template contains:
+  - `id`: Unique identifier for the template
+  - `messageId`: Unique identifier of the message
+  - `channelType`: Type of channel for the template (e.g., 'sms', 'whatsapp')
+  - `content`: The content of the template
+  - `status`: The status of the template
+  - `createdAt`: Timestamp when the template was first created, formatted as a date-time string
+  - `updatedAt`: Timestamp when the template information was last updated, formatted as a date-time string
+  - `name`: Name of the template
 
-<Accordion title="Message model">
-  <MessageResponse />
-</Accordion>
+### `messageActions` (array of objects, optional)
+A collection of actions taken on the message.
+- Each message action contains:
+  - `id`: The unique identifier of the message action, automatically generated and managed.
+  - `transactionId`: The unique identifier for the message operation delivered to a specific recipient related to the action.
+  - `to`: The phone number of the recipient.
+  - `recipientId`: The ID of the recipient's subscription.
+  - `channel`: The channel type for the message (e.g., 'sms', 'telegram').
+  - `title`: The title or subject of the message action.
+  - `content`: The actual content of the message action.
+  - `timestamp`: The date and time when the message action was sent or received, formatted as a date-time string.
+  - `status`: The delivery status of the message action.
+  - `lastUpdatedAt`: Timestamp indicating the last update to the message action, formatted as a date-time string.
+
+### Message Actions Overview
+
+Message Actions represent the different operations or activities related to messages sent to subscribers. These actions detail the process of delivering messages to various recipients, including their status and contents.
+
+#### Example of Message Actions:
+
+```json
+[
+  {
+    "id": "cHJvZHVjdEBwcm94aW5jLmNvbS5hd",
+    "transactionId": "cHJvZHVjdEBwcm94aW5jLmNvbS5hd",
+    "to": "+19715555555",
+    "recipientId": "1",
+    "channel": "sms",
+    "title": "Important Update",
+    "content": "Your scheduled maintenance is due tomorrow.",
+    "timestamp": "2023-10-12T07:20:50.52Z",
+    "status": "sent",
+    "lastUpdatedAt": "2023-10-12T07:20:50.52Z"
+  }
+]
