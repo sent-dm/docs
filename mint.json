@@ -36,11 +36,11 @@
   "tabs": [
     {
       "name": "API Reference",
-      "url": "api-reference/introduction"
+      "url": "api-reference"
     },
     {
       "name": "SDKs",
-      "url": "sdks/overview"
+      "url": "sdks"
     }
   ],
   "anchors": [
