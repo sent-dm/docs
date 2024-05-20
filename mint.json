@@ -57,11 +57,11 @@
   ],
   "navigation": [
     {
-      "group": "Getting Started",
+      "group": "Docs",
       "pages": ["introduction", "datamodels"]
     },
     {
-      "group": "API Documentation",
+      "group": "API Reference",
       "pages": [
         "api-reference/introduction",
         "api-reference/errors",
@@ -91,7 +91,7 @@
       ]
     },
     {
-      "group": "Sdks",
+      "group": "SDKs",
       "pages": [
         "sdks/overview",
         { "group": "Typescript", 
