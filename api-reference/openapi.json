@@ -209,8 +209,8 @@
     },
     "/messages/send": {
       "post": {
-        "summary": "Queue message sending operation for immediate or scheduled processing",
-        "operationId": "queueMessage",
+        "summary": "Send message operation for immediate or scheduled delivery.",
+        "operationId": "Send Message",
         "security": [
           {
             "APIKeyAuth": []
@@ -239,6 +239,9 @@
                     },
                     "message": {
                       "type": "string"
+                    },
+                    "transactionId": {
+                      "type": "string"
                     }
                   }
                 }
@@ -263,7 +266,7 @@
         }
       }
     },
-    "/messages/send/{siteId}/{sendId}": {
+    "/messages/send/{siteId}/{transactionId}": {
       "get": {
         "summary": "Get the status of a message send operation",
         "operationId": "getSendStatus",
@@ -278,7 +281,7 @@
             "description": "Unique identifier for the site"
           },
           {
-            "name": "sendId",
+            "name": "transactionId",
             "in": "path",
             "required": true,
             "schema": {
@@ -719,7 +722,7 @@
               "items": {
                 "type": "object",
                 "properties": {
-                  "operationId": {
+                  "transactionId": {
                     "type": "string",
                     "example": "cHJvZHVjdEBwcm94aW5jLmNvbS5hd",
                     "description": "ID of the message action operation"
