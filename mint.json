@@ -62,50 +62,13 @@
   ],
   "navigation": [
     {
-      "group": "Docs",
-      "pages": ["introduction", "datamodels"]
-    },
-    {
       "group": "API Reference",
       "pages": [
         "api-reference/introduction",
-        "api-reference/errors",
-        { "group": "Subscribers", 
-          "pages": [
-            "api-reference/subscriber/create-subscriber",
-            "api-reference/subscriber/retrieve-a-subscribers-details",
-            "api-reference/subscriber/delete-a-subscriber",
-            "api-reference/subscriber/update-subscriber-details"
-            ] 
-          },
-        {
-          "group": "Message Templates",
-          "pages": [
-            "api-reference/message/create-message-template",
-            "api-reference/message/retrieve-a-list-of-messages",
-            "api-reference/message/retrieve-details-of-a-specific-message"
-          ]
-        },
-        {
-          "group": "Message Actions",
-          "pages": [
-            "api-reference/message/send/get-the-status-of-a-message-action",
-            "api-reference/message/send/send-message"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "SDKs",
-      "pages": [
-        "sdks/overview",
-        { "group": "Typescript", 
-          "pages": [
-            "sdks/typescript"
-            ] 
-          }
+        "api-reference/errors"
         ]
     }
+        
   ],
   "footerSocials": {
     "twitter": "https://twitter.com/sent_dm",
