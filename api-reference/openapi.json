@@ -1,246 +1,861 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Sent.dm API",
-    "version": "1.0"
+    "title": "Sent.dm Core API",
+    "version": "1.1.0",
+    "description": "Sent.dm is a unified messaging API that enables developers to seamlessly send messages across multiple channels including SMS and WhatsApp. It provides programmatic management of customer accounts, messaging capabilities with intelligent routing, message delivery, and template management. The API supports creating, updating, and managing customer profiles, sending messages using templates, retrieving contact information, and handling templates across different messaging channels.",
+    "contact": {
+      "name": "Sent API Support",
+      "email": "developers@sent.dm",
+      "url": "https://www.sent.dm/"
+    },
+    "termsOfService": "https://www.sent.dm/resources/terms-of-service"
   },
-  "servers": [
+  "tags": [
     {
-      "url": "https://sent.dm/api"
+      "name": "Contact",
+      "description": "Lookup phone numbers and manage contacts with the Sent API"
+    },
+    {
+      "name": "Messages",
+      "description": "Send and manage messages across multiple channels with the Sent API"
+    },
+    {
+      "name": "Templates",
+      "description": "Create and manage message templates with the Sent API"
+    },
+    {
+      "name": "Customers",
+      "description": "Create, update, and manage customer accounts with the Sent API"
+    },
+    {
+      "name": "SMS",
+      "description": "Retrieve and manage SMS contact information and capabilities with the Sent API"
+    },
+    {
+      "name": "Whatsapp",
+      "description": "Retrieve and manage WhatsApp contact information and capabilities with the Sent API"
     }
   ],
   "paths": {
-    "/messages": {
-      "post": {
-        "summary": "Create a new message template",
-        "operationId": "postMessage",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MessagePayload"
+    "/contact/{customerId}/id/{id}": {
+      "get": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Retrieve a contact by ID",
+        "description": "Fetches detailed contact information including available messaging channels and verification status. Use this endpoint when you need to look up a specific contact using their unique identifier.",
+        "operationId": "getContactById",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Unique identifier of the customer account",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the contact",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact details successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                },
+                "example": {
+                  "id": "123e4567-e89b-12d3-a456-426614174000",
+                  "phoneNumber": "+1234567890",
+                  "countryCode": "US",
+                  "nationalFormat": "(123) 456-7890",
+                  "availableChannels": "SMS,WHATSAPP",
+                  "defaultChannel": "WHATSAPP",
+                  "verified": true,
+                  "createdAt": "2023-01-01T12:00:00Z",
+                  "updatedAt": "2023-01-01T12:00:00Z"
+                }
               }
             }
+          },
+          "401": {
+            "description": "Authentication credentials are missing or invalid"
+          },
+          "404": {
+            "description": "Contact not found"
           }
         },
-        "responses": {
-          "200": {
-            "description": "Successfully created the message template",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean"
-                    },
-                    "message": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "title": {
-                          "type": "string"
-                        },
-                        "content": {
-                          "type": "string"
-                        },
-                        "siteId": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/messages/{siteId}": {
-      "get": {
-        "summary": "List messages for a site with optional pagination.",
-        "operationId": "listMessagesBySiteId",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "siteId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The site ID"
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "integer",
-              "default": 1
-            },
-            "description": "Page number for pagination"
-          },
-          {
-            "in": "query",
-            "name": "pageSize",
-            "schema": {
-              "type": "integer",
-              "default": 10
-            },
-            "description": "Number of items per page"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "An array of messages for the site.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "page": {
-                      "type": "integer"
-                    },
-                    "pageSize": {
-                      "type": "integer"
-                    },
-                    "totalCount": {
-                      "type": "integer"
-                    },
-                    "messages": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Message"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/messages/{siteId}/{messageId}": {
-      "get": {
-        "summary": "Get a single message by site ID and message ID.",
-        "operationId": "getMessageBySiteIdAndMessageId",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "siteId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The site ID"
-          },
-          {
-            "in": "path",
-            "name": "messageId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The message ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A single message detail.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/messages/send": {
-      "post": {
-        "summary": "Send message operation for immediate or scheduled delivery.",
-        "operationId": "Send Message",
         "security": [
           {
-            "APIKeyAuth": []
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/contact/{customerId}/phone/{phoneNumber}": {
+      "get": {
+        "tags": [
+          "Contact"
+        ],
+        "summary": "Retrieve a contact by phone number",
+        "description": "Looks up contact information using a phone number. This endpoint is useful when you need to find a contact's details but only have their phone number. It returns the same detailed information as the ID-based lookup.",
+        "operationId": "getContactByPhone",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Unique identifier of the customer account",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "phoneNumber",
+            "in": "path",
+            "description": "Phone number in E.164 format (e.g., +1234567890)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Contact details successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                },
+                "example": {
+                  "id": "123e4567-e89b-12d3-a456-426614174000",
+                  "phoneNumber": "+1234567890",
+                  "countryCode": "US",
+                  "nationalFormat": "(123) 456-7890",
+                  "availableChannels": "SMS,WHATSAPP",
+                  "defaultChannel": "WHATSAPP",
+                  "verified": true,
+                  "createdAt": "2023-01-01T12:00:00Z",
+                  "updatedAt": "2023-01-01T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication credentials are missing or invalid"
+          },
+          "404": {
+            "description": "Contact not found"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/messages": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Send a message to a contact using a template",
+        "description": "Sends a templated message to a specific contact. The platform automatically determines the optimal channel (SMS or WhatsApp) based on the contact's preferences and availability. Messages are sent using pre-defined templates to ensure consistent formatting and compliance across channels.",
+        "operationId": "sendMessageToContact",
         "requestBody": {
-          "required": true,
+          "description": "Message details including customer ID, contact ID, and template ID",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SendMessagePayload"
+                "$ref": "#/components/schemas/SendMessageToContactRequest"
+              },
+              "example": {
+                "customerId": "550e8400-e29b-41d4-a716-446655440000",
+                "contactId": "7c11e821-c839-4c3d-8a89-1f78b71a0c38",
+                "templateId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
-          "202": {
-            "description": "Message payload queued for processing",
+          "200": {
+            "description": "Message successfully queued for delivery",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": {
-                      "type": "boolean"
+                    "messageId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "Unique identifier for tracking the message"
                     },
-                    "message": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "queued",
+                        "sending",
+                        "delivered"
+                      ],
+                      "description": "Current status of the message"
+                    },
+                    "channel": {
+                      "type": "string",
+                      "enum": [
+                        "sms",
+                        "whatsapp"
+                      ],
+                      "description": "Selected delivery channel"
+                    }
+                  }
+                },
+                "example": {
+                  "messageId": "123e4567-e89b-12d3-a456-426614174000",
+                  "status": "queued",
+                  "channel": "whatsapp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
                       "type": "string"
                     },
-                    "transactionId": {
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing API key"
+          },
+          "404": {
+            "description": "Contact, template, or customer not found"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/messages/phone-number": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Send a message to a phone number using a template",
+        "description": "Sends a templated message directly to a phone number without requiring a pre-existing contact. The system will attempt to determine the best channel for delivery and create a contact record if one doesn't exist.",
+        "operationId": "sendMessageToPhoneNumber",
+        "requestBody": {
+          "description": "Message details including customer ID, phone number, and template ID",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageToPhoneNumberRequest"
+              },
+              "example": {
+                "customerId": "550e8400-e29b-41d4-a716-446655440000",
+                "phoneNumber": "+1234567890",
+                "templateId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Message successfully queued for delivery",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "messageId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "queued",
+                        "sending",
+                        "delivered"
+                      ]
+                    },
+                    "channel": {
+                      "type": "string",
+                      "enum": [
+                        "sms",
+                        "whatsapp"
+                      ]
+                    },
+                    "contactId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created or existing contact"
+                    }
+                  }
+                },
+                "example": {
+                  "messageId": "123e4567-e89b-12d3-a456-426614174000",
+                  "status": "queued",
+                  "channel": "whatsapp",
+                  "contactId": "7c11e821-c839-4c3d-8a89-1f78b71a0c38"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid phone number or request parameters"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing API key"
+          },
+          "404": {
+            "description": "Template or customer not found"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/templates": {
+      "post": {
+        "tags": [
+          "Templates"
+        ],
+        "summary": "Create a new message template",
+        "description": "Creates a new message template that can be used for sending standardized messages across different channels. Templates ensure consistent messaging and support variable substitution.",
+        "operationId": "createTemplate",
+        "requestBody": {
+          "description": "Template creation details including customer ID and template name",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateCreateRequest"
+              },
+              "example": {
+                "customerId": "550e8400-e29b-41d4-a716-446655440000",
+                "name": "Order Confirmation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Template created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponsesTemplateResponse"
+                },
+                "example": {
+                  "id": "123e4567-e89b-12d3-a456-426614174000",
+                  "customerId": "550e8400-e29b-41d4-a716-446655440000",
+                  "name": "Order Confirmation",
+                  "category": "transactional",
+                  "rawBody": "Your order #{{orderId}} has been confirmed.",
+                  "whatsappTemplateName": "order_confirmation",
+                  "whatsappTemplateStatus": "approved",
+                  "createdAt": "2023-01-01T12:00:00Z",
+                  "updatedAt": "2023-01-01T12:00:00Z"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Templates"
+        ],
+        "summary": "Retrieve all templates for a customer",
+        "description": "Returns a list of all message templates associated with the specified customer ID. Templates are returned in descending order by creation date.",
+        "operationId": "getTemplatesForCustomer",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "query",
+            "description": "Unique identifier of the customer",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of templates retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponsesTemplateResponse"
+                  }
+                },
+                "example": [
+                  {
+                    "id": "123e4567-e89b-12d3-a456-426614174000",
+                    "customerId": "550e8400-e29b-41d4-a716-446655440000",
+                    "name": "Order Confirmation",
+                    "category": "transactional",
+                    "rawBody": "Your order #{{orderId}} has been confirmed.",
+                    "whatsappTemplateName": "order_confirmation",
+                    "whatsappTemplateStatus": "approved",
+                    "createdAt": "2023-01-01T12:00:00Z",
+                    "updatedAt": "2023-01-01T12:00:00Z"
+                  },
+                  {
+                    "id": "223e4567-e89b-12d3-a456-426614174001",
+                    "customerId": "550e8400-e29b-41d4-a716-446655440000",
+                    "name": "Shipping Update",
+                    "category": "transactional",
+                    "rawBody": "Your order #{{orderId}} has been shipped.",
+                    "whatsappTemplateName": "shipping_update",
+                    "whatsappTemplateStatus": "pending",
+                    "createdAt": "2023-02-01T12:00:00Z",
+                    "updatedAt": "2023-02-01T12:00:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication credentials are missing or invalid"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/customers": {
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Create a new customer account",
+        "description": "Creates a new customer account in the Sent platform. This endpoint initializes a new customer profile with basic information and returns the created customer details including generated IDs and credentials for various messaging channels.",
+        "operationId": "createCustomer",
+        "requestBody": {
+          "description": "Customer name to create the account",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              },
+              "example": "Acme Corp"
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Customer successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                },
+                "example": {
+                  "id": "123e4567-e89b-12d3-a456-426614174000",
+                  "name": "Acme Corp",
+                  "sendingPhoneNumber": "+1234567890",
+                  "smsMessagingProfileId": "msg_prof_123",
+                  "smsBearerToken": "sms_token_xyz",
+                  "createdAt": "2023-01-01T12:00:00Z",
+                  "updatedAt": "2023-01-01T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication credentials are missing or invalid"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Retrieve all customers with pagination",
+        "description": "Returns a paginated list of all customers. Use page and pageSize parameters to control the number of results returned. Results are sorted by creation date in descending order.",
+        "operationId": "getAllCustomers",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number to retrieve (starts from 1)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "example": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items to return per page",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 100,
+              "example": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of customers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                },
+                "example": [
+                  {
+                    "id": "123e4567-e89b-12d3-a456-426614174000",
+                    "name": "Acme Corp",
+                    "sendingPhoneNumber": "+1234567890",
+                    "smsMessagingProfileId": "msg_prof_123",
+                    "smsBearerToken": "sms_token_xyz",
+                    "createdAt": "2023-01-01T12:00:00Z",
+                    "updatedAt": "2023-01-01T12:00:00Z"
+                  },
+                  {
+                    "id": "223e4567-e89b-12d3-a456-426614174001",
+                    "name": "Beta LLC",
+                    "sendingPhoneNumber": "+1987654321",
+                    "smsMessagingProfileId": "msg_prof_456",
+                    "smsBearerToken": "sms_token_abc",
+                    "createdAt": "2023-02-01T12:00:00Z",
+                    "updatedAt": "2023-02-01T12:00:00Z"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication credentials are missing or invalid"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Retrieve a customer by ID",
+        "description": "Returns detailed information about a specific customer including their messaging channel configurations and credentials.",
+        "operationId": "getCustomerById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the customer",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                },
+                "example": {
+                  "id": "123e4567-e89b-12d3-a456-426614174000",
+                  "name": "Acme Corp",
+                  "sendingPhoneNumber": "+1234567890",
+                  "smsMessagingProfileId": "msg_prof_123",
+                  "smsBearerToken": "sms_token_xyz",
+                  "createdAt": "2023-01-01T12:00:00Z",
+                  "updatedAt": "2023-01-01T12:00:00Z"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Update customer information",
+        "description": "Updates an existing customer's information including messaging channel configurations. All fields in the request body will override existing values.",
+        "operationId": "updateCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the customer to update",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated customer information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomersUpdateCustomerRequest"
+              },
+              "example": {
+                "name": "Acme Corporation",
+                "sendingPhoneNumber": "+1234567890",
+                "smsMessagingProfileId": "msg_prof_789",
+                "smsBearerToken": "sms_token_def"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Customer updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                },
+                "example": {
+                  "id": "123e4567-e89b-12d3-a456-426614174000",
+                  "name": "Acme Corporation",
+                  "sendingPhoneNumber": "+1234567890",
+                  "smsMessagingProfileId": "msg_prof_789",
+                  "smsBearerToken": "sms_token_def",
+                  "createdAt": "2023-01-01T12:00:00Z",
+                  "updatedAt": "2023-03-01T12:00:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication credentials are missing or invalid"
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Delete a customer",
+        "description": "Permanently deletes a customer and all associated data. This action cannot be undone. All active services for this customer will be terminated.",
+        "operationId": "deleteCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of the customer to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer successfully deleted"
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        },
+        "security": [
+          {
+            "ApiKey": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/sms": {
+      "get": {
+        "tags": [
+          "SMS"
+        ],
+        "summary": "Retrieve SMS contact information and capabilities",
+        "description": "Fetches or creates SMS contact information for a given phone number. This endpoint validates the phone number, determines SMS capabilities, and returns detailed formatting information needed for message delivery. Use this before sending messages to ensure proper SMS channel availability.",
+        "operationId": "getSMSContact",
+        "parameters": [
+          {
+            "name": "phoneNumber",
+            "in": "query",
+            "description": "Target phone number in E.164 format (e.g., +1234567890)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "+14155552671"
+          },
+          {
+            "name": "retrieveIfDoesNotExists",
+            "in": "query",
+            "description": "When true, creates a new SMS contact if one doesn't exist",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sentId",
+            "in": "query",
+            "description": "Optional Sent platform identifier for existing contacts",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved SMS contact information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SMSPayload"
+                },
+                "example": {
+                  "id": "123e4567-e89b-12d3-a456-426614174000",
+                  "sentId": "123e4567-e89b-12d3-a456-426614174111",
+                  "phoneNumber": "+14155552671",
+                  "countryCode": "US",
+                  "validNumber": true,
+                  "nationalFormat": "(415) 555-2671",
+                  "payload": "{\"carrier\":\"Verizon\",\"type\":\"mobile\"}",
+                  "createdAt": "2023-01-01T12:00:00Z",
+                  "updatedAt": "2023-01-01T12:00:00Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid phone number format or request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
                       "type": "string"
                     }
                   }
@@ -248,890 +863,471 @@
               }
             }
           },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/messages/send/{siteId}/{transactionId}": {
-      "get": {
-        "summary": "Get the status of a message send operation",
-        "operationId": "getSendStatus",
-        "parameters": [
-          {
-            "name": "siteId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Unique identifier for the site"
-          },
-          {
-            "name": "transactionId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Unique identifier for the send operation"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/MessageJobPayloadResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/subscribers": {
-      "post": {
-        "summary": "Create a new subscriber contact",
-        "operationId": "postSubscriber",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SubscriberPayload"
-              }
-            }
+            "description": "Unauthorized - Invalid or missing API key"
           }
         },
-        "responses": {
-          "200": {
-            "description": "Subscriber has been successfully created or already exists.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubscriberResponse"
-                }
-              }
-            }
+        "security": [
+          {
+            "ApiKey": []
           },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
+          {
+            "BearerAuth": []
           }
-        }
+        ]
       }
     },
-    "/subscribers/{siteId}/{subscriberId}": {
+    "/whatsapp": {
       "get": {
-        "summary": "Retrieve a subscriber's details by ID",
-        "operationId": "getSubscriber",
+        "tags": [
+          "Whatsapp"
+        ],
+        "summary": "Retrieve WhatsApp contact information",
+        "description": "Fetches or creates WhatsApp contact information for a given phone number. This endpoint validates WhatsApp availability and returns detailed contact metadata including business account status and profile information.",
+        "operationId": "getWhatsappContact",
         "parameters": [
           {
-            "name": "siteId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "subscriberId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "includeEvents",
+            "name": "phoneNumber",
             "in": "query",
-            "required": false,
-            "description": "Include associated events in the response",
+            "description": "Phone number in international format (E.164)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "+14155552671"
+            }
+          },
+          {
+            "name": "retrieveIfDoesNotExists",
+            "in": "query",
+            "description": "Whether to create a new contact if one doesn't exist",
+            "required": true,
             "schema": {
               "type": "boolean",
               "default": false
             }
           },
           {
-            "name": "includeMessages",
+            "name": "sentId",
             "in": "query",
-            "required": false,
-            "description": "Include associated messages in the response",
+            "description": "Optional Sent platform identifier for tracking",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Details of the subscriber",
+            "description": "Successfully retrieved WhatsApp contact information",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubscriberWithOptionalFields"
+                  "$ref": "#/components/schemas/WhatsAppPayload"
+                },
+                "example": {
+                  "id": "123e4567-e89b-12d3-a456-426614174000",
+                  "sentId": "123e4567-e89b-12d3-a456-426614174111",
+                  "phoneNumber": "+14155552671",
+                  "whatsappId": "14155552671",
+                  "countryCode": "US",
+                  "numberType": "MOBILE",
+                  "profilePicture": "https://profile.whatsapp.com/photo.jpg",
+                  "isBusiness": false,
+                  "invalidRecord": false,
+                  "createdAt": "2023-01-01T12:00:00Z",
+                  "updatedAt": "2023-01-01T12:00:00Z"
                 }
               }
             }
           },
           "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      },
-      "put": {
-        "summary": "Update subscriber details",
-        "operationId": "updateSubscriber",
-        "parameters": [
-          {
-            "name": "siteId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "subscriberId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "defaultChannel": {
-                    "$ref": "#/components/schemas/SubscriptionChannel"
+            "description": "Invalid phone number format or request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
                   }
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing API key"
+          },
+          "404": {
+            "description": "WhatsApp contact not found and creation not requested"
           }
         },
-        "responses": {
-          "200": {
-            "description": "Subscriber updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubscriberBase"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      },
-      "delete": {
-        "summary": "Delete a subscriber",
-        "operationId": "deleteSubscriber",
-        "parameters": [
+        "security": [
           {
-            "name": "siteId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "ApiKey": []
           },
           {
-            "name": "subscriberId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "BearerAuth": []
           }
-        ],
-        "responses": {
-          "204": {
-            "description": "Subscriber deleted successfully"
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
+        ]
       }
     }
   },
   "components": {
     "securitySchemes": {
-      "APIKeyAuth": {
+      "ApiKey": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      },
+      "BearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "bearerFormat": "API Key"
+        "bearerFormat": "JWT"
       }
     },
     "schemas": {
-      "Message": {
+      "Contact": {
         "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "siteId": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "templates": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MessageTemplate"
-            }
-          }
-        }
-      },
-      "MessageTemplate": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "messageId": {
-            "type": "string"
-          },
-          "channelType": {
-            "$ref": "#/components/schemas/SubscriptionChannel"
-          },
-          "content": {
-            "type": "object",
-            "additionalProperties": true
-          },
-          "status": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "SubscriptionChannel": {
-        "type": "string",
-        "enum": ["sms", "whatsapp", "telegram", "imessage"]
-      },
-      "MessagePayload": {
-        "type": "object",
-        "properties": {
-          "siteId": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          }
-        },
-        "required": ["siteId", "name", "content"]
-      },
-      "SubscriberPayload": {
-        "type": "object",
-        "properties": {
-          "phoneNumber": {
-            "type": "string"
-          },
-          "siteId": {
-            "type": "string"
-          }
-        },
-        "required": ["phoneNumber", "siteId"]
-      },
-      "MessageResponseSuccess": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "title": {
-                "type": "string"
-              },
-              "content": {
-                "type": "string"
-              },
-              "siteId": {
-                "type": "string"
-              }
-            }
-          },
-          "publishQstash": {
-            "type": "boolean"
-          }
-        }
-      },
-      "SendMessagePayload": {
-        "type": "object",
-        "properties": {
-          "siteId": {
-            "type": "string"
-          },
-          "recipients": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "messageId": {
-            "type": "string"
-          },
-          "senderPhoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "sendAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "required": ["siteId", "recipients", "messageId"]
-      },
-      "MessageJobPayloadResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "example": "cHJvZHVjdEBwcm94aW5jLmNvbS5hd",
-              "description": "The unique identifier for the message job payload"
-            },
-            "messages": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "transactionId": {
-                    "type": "string",
-                    "example": "cHJvZHVjdEBwcm94aW5jLmNvbS5hd",
-                    "description": "ID of the message action operation"
-                  },
-                  "to": {
-                    "type": "string",
-                    "example": "+19715555555",
-                    "description": "Phone number of the recipient"
-                  },
-                  "recipientId": {
-                    "type": "string",
-                    "example": "1",
-                    "description": "ID of the recipient's subscription"
-                  },
-                  "channel": {
-                    "type": "string",
-                    "example": "sms",
-                    "description": "Channel type for the message"
-                  },
-                  "status": {
-                    "type": "string",
-                    "example": "sent",
-                    "description": "Status of the message"
-                  },
-                  "lastUpdatedAt": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2023-10-12T07:20:50.52Z",
-                    "description": "The last updated timestamp of the message status"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "Subscriber": {
-        "type": "object",
+        "description": "Represents a contact in the Sent messaging platform with their communication preferences and channel availability",
+        "additionalProperties": false,
         "properties": {
           "id": {
             "type": "string",
-            "description": "The unique identifier for the subscriber, automatically generated and managed."
+            "format": "uuid",
+            "description": "Unique identifier for the contact"
           },
           "phoneNumber": {
             "type": "string",
-            "description": "The phone number of the subscriber, which must be unique across all subscribers."
-          },
-          "defaultChannel": {
-            "$ref": "#/components/schemas/SubscriptionChannel"
-          },
-          "SubscriberChannels": {
-            "type": "array",
-            "description": "The list of all subscribed channels by the subscriber, providing details on the status and specific configurations of each.",
-            "items": {
-              "$ref": "#/components/schemas/SubscriberChannels"
-            }
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The timestamp indicating when the subscriber was first created in the system, formatted as a date-time string."
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The timestamp indicating when the subscriber information was last updated, formatted as a date-time string."
+            "description": "Contact's phone number in E.164 format"
           },
           "countryCode": {
             "type": "string",
-            "description": "The country code associated with the subscriber's phone number."
+            "description": "Two-letter ISO country code"
           },
-          "countryIso": {
+          "nationalFormat": {
             "type": "string",
-            "description": "The ISO country code representing the subscriber's country of residence."
+            "description": "Phone number formatted according to national standards"
           },
-          "verificationStatus": {
+          "availableChannels": {
             "type": "string",
-            "enum": ["pending", "active", "inactive"],
-            "description": "The current verification status of the subscriber."
-          },
-          "Events": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Event"
-            }
-          },
-          "messages": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MessageAction"
-            }
-          }
-        }
-      },
-      "SubscriberResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          },
-          "subscriberId": {
-            "type": "string",
-            "description": "The unique identifier of the subscriber"
-          }
-        }
-      },
-      "Event": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the event, automatically generated and managed."
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the event."
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The timestamp when the event occurred, automatically set to the current time."
-          },
-          "channelType": {
-            "type": "string",
-            "description": "The communication channel type used during the event."
-          },
-          "properties": {
-            "type": "object",
-            "description": "Additional JSON formatted properties related to the event"
-          }
-        }
-      },
-      "SubscriberChannels": {
-        "type": "object",
-        "properties": {
-          "channel": {
-            "$ref": "#/components/schemas/SubscriptionChannel"
-          },
-          "valid": {
-            "type": "string",
-            "enum": ["pending", "valid", "invalid"],
-            "default": "pending",
-            "description": "Current status of the channel, automatically set to pending."
-          }
-        }
-      },
-      "MessageAction": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Unique identifier of the message."
-          },
-          "title": {
-            "type": "string",
-            "description": "Title or subject of the message."
-          },
-          "content": {
-            "type": "string",
-            "description": "The actual content of the message."
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The date and time when the message was sent or received."
-          }
-        }
-      },
-      "SubscriberBase": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the subscriber, automatically generated and managed."
-          },
-          "phoneNumber": {
-            "type": "string",
-            "description": "The phone number of the subscriber, which must be unique across all subscribers."
+            "description": "Comma-separated list of available messaging channels (SMS, WHATSAPP)"
           },
           "defaultChannel": {
-            "$ref": "#/components/schemas/SubscriptionChannel"
+            "type": "string",
+            "description": "Preferred messaging channel for this contact"
           },
-          "SubscriberChannels": {
-            "type": "array",
-            "description": "The list of all subscribed channels by the subscriber, providing details on the status and specific configurations of each.",
-            "items": {
-              "$ref": "#/components/schemas/SubscriberChannels"
-            }
+          "verified": {
+            "type": "boolean",
+            "description": "Indicates if the contact's phone number has been verified"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-            "description": "The timestamp indicating when the subscriber was first created in the system, formatted as a date-time string."
+            "description": "Timestamp when the contact was created"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "The timestamp indicating when the subscriber information was last updated, formatted as a date-time string."
-          },
-          "countryCode": {
-            "type": "string",
-            "description": "The country code associated with the subscriber's phone number."
-          },
-          "countryIso": {
-            "type": "string",
-            "description": "The ISO country code representing the subscriber's country of residence."
-          },
-          "verificationStatus": {
-            "type": "string",
-            "enum": ["pending", "active", "inactive"],
-            "description": "The current verification status of the subscriber."
+            "description": "Timestamp when the contact was last updated"
           }
         }
       },
-      "SubscriberWithOptionalFields": {
+      "SendMessageToContactRequest": {
+        "type": "object",
+        "description": "Request model for sending a message to a contact using a template",
+        "required": [
+          "customerId",
+          "contactId",
+          "templateId"
+        ],
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the customer"
+          },
+          "contactId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the contact"
+          },
+          "templateId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the message template"
+          }
+        }
+      },
+      "SendMessageToPhoneNumberRequest": {
+        "type": "object",
+        "description": "Request model for sending a message to a phone number using a template",
+        "required": [
+          "customerId",
+          "phoneNumber",
+          "templateId"
+        ],
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the customer"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number in E.164 format"
+          },
+          "templateId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the message template"
+          }
+        }
+      },
+      "TemplateCreateRequest": {
+        "type": "object",
+        "description": "Request model for creating a new message template",
+        "required": [
+          "customerId",
+          "name"
+        ],
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the customer creating the template"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the template for identification purposes",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        }
+      },
+      "ResponsesTemplateResponse": {
+        "type": "object",
+        "description": "Response model containing template details",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the template"
+          },
+          "customerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Customer ID associated with the template"
+          },
+          "name": {
+            "type": "string",
+            "description": "Template name"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of the template (e.g., transactional, marketing)",
+            "enum": [
+              "transactional",
+              "marketing",
+              "alert"
+            ]
+          },
+          "rawBody": {
+            "type": "string",
+            "description": "Template content with variable placeholders"
+          },
+          "whatsappTemplateName": {
+            "type": "string",
+            "description": "Associated WhatsApp template name if applicable"
+          },
+          "whatsappTemplateStatus": {
+            "type": "string",
+            "description": "Approval status of WhatsApp template",
+            "enum": [
+              "pending",
+              "approved",
+              "rejected"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Template creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last template update timestamp"
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "description": "Represents a customer account within the Sent platform, including messaging channel configurations and credentials",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the customer"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the customer organization"
+          },
+          "sendingPhoneNumber": {
+            "type": "string",
+            "description": "Primary phone number used for sending messages"
+          },
+          "smsMessagingProfileId": {
+            "type": "string",
+            "description": "Identifier for the SMS messaging profile"
+          },
+          "smsBearerToken": {
+            "type": "string",
+            "description": "Bearer token for authenticating SMS requests"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the customer account was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the customer account was last updated"
+          }
+        }
+      },
+      "CustomersUpdateCustomerRequest": {
+        "type": "object",
+        "description": "Request model for updating customer information",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Updated name of the customer organization"
+          },
+          "sendingPhoneNumber": {
+            "type": "string",
+            "description": "Updated primary phone number for sending messages"
+          },
+          "smsMessagingProfileId": {
+            "type": "string",
+            "description": "Updated SMS messaging profile identifier"
+          },
+          "smsBearerToken": {
+            "type": "string",
+            "description": "Updated bearer token for SMS authentication"
+          }
+        }
+      },
+      "SMSPayload": {
+        "type": "object",
+        "description": "Detailed SMS contact information including validation and formatting details",
         "allOf": [
           {
-            "$ref": "#/components/schemas/SubscriberBase"
+            "$ref": "#/components/schemas/PayloadPhoneNumber"
           },
           {
             "type": "object",
             "properties": {
-              "Events": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Event"
-                },
-                "description": "A list of events associated with the subscriber"
+              "countryCode": {
+                "type": "string",
+                "description": "ISO country code for the phone number",
+                "example": "US"
               },
-              "messages": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/MessageAction"
-                },
-                "description": "A list of messages associated with the subscriber"
+              "validNumber": {
+                "type": "boolean",
+                "description": "Indicates if the phone number is valid for SMS delivery",
+                "example": true
+              },
+              "nationalFormat": {
+                "type": "string",
+                "description": "Locally formatted version of the phone number",
+                "example": "(415) 555-2671"
+              },
+              "payload": {
+                "type": "string",
+                "description": "Additional payload information in JSON format",
+                "example": "{\"carrier\":\"Verizon\",\"type\":\"mobile\"}"
+              }
+            }
+          }
+        ]
+      },
+      "PayloadPhoneNumber": {
+        "type": "object",
+        "description": "Basic phone number payload information",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the phone number record"
+          },
+          "sentId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Sent platform identifier"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number in E.164 format"
+          }
+        }
+      },
+      "WhatsAppPayload": {
+        "type": "object",
+        "description": "WhatsApp contact information including profile and verification details",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PayloadPhoneNumber"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "whatsappId": {
+                "type": "string",
+                "description": "Unique WhatsApp identifier for the contact"
+              },
+              "countryCode": {
+                "type": "string",
+                "description": "ISO country code of the phone number"
+              },
+              "numberType": {
+                "type": "string",
+                "description": "Type of phone number (MOBILE, LANDLINE, etc)",
+                "enum": [
+                  "MOBILE",
+                  "LANDLINE",
+                  "VOIP",
+                  "UNKNOWN"
+                ]
+              },
+              "profilePicture": {
+                "type": "string",
+                "description": "URL to the contact's WhatsApp profile picture"
+              },
+              "isBusiness": {
+                "type": "boolean",
+                "description": "Indicates if the number belongs to a WhatsApp Business account"
+              },
+              "invalidRecord": {
+                "type": "boolean",
+                "description": "Indicates if the WhatsApp account is invalid or deactivated"
               }
             }
           }
         ]
       }
-    },
-    "responses": {
-      "MessageJobPayloadResponse": {
-        "description": "Array of message job payloads",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/MessageJobPayloadResponse"
-            }
-          }
-        }
-      },
-      "BadRequest": {
-        "description": "Bad Request - The request is malformed.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "doc_url": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "example": {
-              "error": {
-                "code": "bad_request",
-                "message": "The request is malformed, either missing required fields, using wrong datatypes, or being syntactically incorrect.",
-                "doc_url": "https://docs.sent.dm/api-reference/errors#bad_request"
-              }
-            }
-          }
-        }
-      },
-      "Unauthorized": {
-        "description": "Unauthorized - Authentication credentials were not provided or are invalid.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "doc_url": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "example": {
-              "error": {
-                "code": "unauthorized",
-                "message": "Authentication credentials were not provided or are invalid.",
-                "doc_url": "https://docs.sent.dm/api-reference/errors#unauthorized"
-              }
-            }
-          }
-        }
-      },
-      "Forbidden": {
-        "description": "Forbidden - The client lacks proper permission.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "doc_url": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "example": {
-              "error": {
-                "code": "forbidden",
-                "message": "You do not have the necessary permissions for the resource.",
-                "doc_url": "https://docs.sent.dm/api-reference/errors#forbidden"
-              }
-            }
-          }
-        }
-      },
-      "NotFound": {
-        "description": "Not Found - The requested resource could not be found.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "doc_url": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "example": {
-              "error": {
-                "code": "not_found",
-                "message": "The requested resource could not be found.",
-                "doc_url": "https://docs.sent.dm/api-reference/errors#not_found"
-              }
-            }
-          }
-        }
-      },
-      "InternalServerError": {
-        "description": "Internal Server Error - An unexpected error that prevented the server from fulfilling the request.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "doc_url": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "example": {
-              "error": {
-                "code": "internal_server_error",
-                "message": "An unexpected error has occurred that prevented the server from fulfilling the request.",
-                "doc_url": "https://docs.sent.dm/api-reference/errors#internal_server_error"
-              }
-            }
-          }
-        }
-      }
     }
   },
   "security": [
     {
-      "APIKeyAuth": []
+      "ApiKey": []
+    },
+    {
+      "BearerAuth": []
     }
   ]
 }
